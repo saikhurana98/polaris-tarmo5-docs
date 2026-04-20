@@ -7,7 +7,7 @@ permalink: /announcement/
 <div class="page-header">
   <h1>Week 1 Official Announcement</h1>
   <div class="page-meta">
-    <span class="meta-item">&#128197; April 20, 2026</span>
+    <span class="meta-item">📅 April 20, 2026</span>
     <span class="badge badge-accent">Official</span>
   </div>
 </div>
@@ -47,8 +47,8 @@ In the next four days, your team must:
 
 <ol class="rules">
   <li><strong>Assemble the Tarmo5</strong> from your provided kit, including all 3D-printed components, electronics, and drivetrain.</li>
-  <li><strong>Solder all electrical connections</strong> &mdash; motor leads, ESC wiring, and battery connectors.</li>
-  <li><strong>Configure your transmitter</strong> using RadioMaster EdgeTX &mdash; channel mapping, endpoints, trims, and failsafe.</li>
+  <li><strong>Solder all electrical connections</strong> — motor leads, ESC wiring, and battery connectors.</li>
+  <li><strong>Configure your transmitter</strong> using RadioMaster EdgeTX — channel mapping, endpoints, trims, and failsafe.</li>
   <li><strong>Test and tune your car</strong> to ensure it can reliably complete laps without mechanical or electrical failure.</li>
 </ol>
 
@@ -86,7 +86,7 @@ Detailed instructions, resources, and a build checklist are available at the [We
   <li>The car must complete <strong>3 full laps</strong> without stopping or being touched.</li>
   <li>The out lap does not count.</li>
   <li>If the car leaves the track boundaries, the attempt is void.</li>
-  <li>No time limit per lap &mdash; just complete them cleanly.</li>
+  <li>No time limit per lap — just complete them cleanly.</li>
 </ol>
 
 ---
@@ -102,21 +102,27 @@ Four days is tight. That is intentional. The Polaris GP rewards teams that execu
 ## WhatsApp Message
 
 <div class="copy-block">
-  <button class="copy-btn">Copy</button>
-  <div class="copy-content" markdown="0">
-<strong>Polaris GP &mdash; Week 1 is LIVE</strong><br><br>
-Hey everyone! Welcome to Week 1 of the Polaris Grand Prix.<br><br>
-Your kits are ready. Here's the deal:<br><br>
-<strong>Goal:</strong> Build your Tarmo5 and complete 3 consecutive laps on the 2nd floor track by <strong>Thursday (April 24)</strong>.<br><br>
-This is pass/fail &mdash; no laps, no competition.<br><br>
-What you need to learn this week:<br>
-&bull; Soldering (motor leads, ESC, battery)<br>
-&bull; Onshape CAD (understanding the Tarmo5 model)<br>
-&bull; Hand tools (screwdrivers, nylock nuts, avoiding cross-threading)<br>
-&bull; EdgeTX tuning (transmitter setup, endpoints, failsafe)<br><br>
-Full instructions, build checklist, and all the YouTube tutorials you'll need:<br>
-<strong>https://saikhurana98.github.io/polaris-tarmo5-docs/week1/</strong><br><br>
-Start building NOW. Don't wait until Wednesday.<br><br>
-Good luck, see you on the track Thursday!
-  </div>
+  <button class="copy-btn" type="button">Copy</button>
+  <div class="copy-content">Polaris GP — Week 1 is LIVE
+
+Hey everyone! Welcome to Week 1 of the Polaris Grand Prix.
+
+Your kits are ready. Here's the deal:
+
+Goal: Build your Tarmo5 and complete 3 consecutive laps on the 2nd floor track by Thursday (April 24).
+
+This is pass/fail — no laps, no competition.
+
+What you need to learn this week:
+• Soldering (motor leads, ESC, battery)
+• Onshape CAD (understanding the Tarmo5 model)
+• Hand tools (screwdrivers, nylock nuts, avoiding cross-threading)
+• EdgeTX tuning (transmitter setup, endpoints, failsafe)
+
+Full instructions, build checklist, and all the YouTube tutorials you'll need:
+https://saikhurana98.github.io/polaris-tarmo5-docs/week1/
+
+Start building NOW. Don't wait until Wednesday.
+
+Good luck, see you on the track Thursday!</div>
 </div>

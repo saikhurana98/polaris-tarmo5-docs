@@ -1,6 +1,8 @@
 title: Polaris GP - Tarmo5 Build Competition
 description: Official documentation and weekly instructions for the Polaris Grand Prix RC car build competition.
-baseurl: ""
-url: "https://saikhurana98.github.io/polaris-tarmo5-docs"
+baseurl: "/polaris-tarmo5-docs"
+url: "https://saikhurana98.github.io"
 
 markdown: kramdown
+kramdown:
+  parse_block_html: true
