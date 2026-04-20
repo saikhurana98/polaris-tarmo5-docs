@@ -6,14 +6,12 @@
   <title>{% if page.title %}{{ page.title }} | {% endif %}{{ site.title }}</title>
   <meta name="description" content="{{ site.description }}">
 
-  <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
   <link rel="stylesheet" href="{{ '/assets/css/style.css' | relative_url }}">
 
-  <!-- Respect system preference, allow manual override -->
   <script>
     (function() {
       var saved = localStorage.getItem('theme');
@@ -23,8 +21,8 @@
   </script>
 </head>
 <body>
-  <div class="site-wrapper">
-    <header class="site-header">
+  <header class="site-header">
+    <div class="site-header-inner">
       <a href="{{ '/' | relative_url }}" class="site-logo">
         <span class="logo-mark">PG</span>
         Polaris GP
@@ -36,12 +34,14 @@
           <a href="{{ '/announcement/' | relative_url }}" {% if page.url == '/announcement/' %}class="active"{% endif %}>Announcement</a>
         </nav>
         <button class="theme-toggle" onclick="toggleTheme()" aria-label="Toggle theme">
-          <span class="icon-sun">&#9788;</span>
-          <span class="icon-moon">&#9790;</span>
+          <span class="icon-sun">&#9728;&#65039;</span>
+          <span class="icon-moon">&#9789;</span>
         </button>
       </div>
-    </header>
+    </div>
+  </header>
 
+  <div class="site-wrapper">
     <main class="site-main">
       {{ content }}
     </main>
@@ -59,6 +59,20 @@
       html.setAttribute('data-theme', next);
       localStorage.setItem('theme', next);
     }
+
+    // Copy button for WhatsApp block
+    document.addEventListener('DOMContentLoaded', function() {
+      document.querySelectorAll('.copy-btn').forEach(function(btn) {
+        btn.addEventListener('click', function() {
+          var block = btn.closest('.copy-block');
+          var text = block.querySelector('.copy-content').innerText;
+          navigator.clipboard.writeText(text).then(function() {
+            btn.textContent = 'Copied!';
+            setTimeout(function() { btn.textContent = 'Copy'; }, 2000);
+          });
+        });
+      });
+    });
   </script>
 </body>
 </html>
