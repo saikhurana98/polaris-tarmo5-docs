@@ -96,33 +96,3 @@ Detailed instructions, resources, and a build checklist are available at the [We
 Four days is tight. That is intentional. The Polaris GP rewards teams that execute under pressure. Start building immediately, divide work among your team, and do not wait until Wednesday night.
 
 **Polaris GP Organizers**
-
----
-
-## WhatsApp Message
-
-<div class="copy-block">
-  <button class="copy-btn" type="button">Copy</button>
-  <div class="copy-content">Polaris GP — Week 1 is LIVE
-
-Hey everyone! Welcome to Week 1 of the Polaris Grand Prix.
-
-Your kits are ready. Here's the deal:
-
-Goal: Build your Tarmo5 and complete 3 consecutive laps on the 2nd floor track by Thursday (April 24).
-
-This is pass/fail — no laps, no competition.
-
-What you need to learn this week:
-• Soldering (motor leads, ESC, battery)
-• Onshape CAD (understanding the Tarmo5 model)
-• Hand tools (screwdrivers, nylock nuts, avoiding cross-threading)
-• EdgeTX tuning (transmitter setup, endpoints, failsafe)
-
-Full instructions, build checklist, and all the YouTube tutorials you'll need:
-https://saikhurana98.github.io/polaris-tarmo5-docs/week1/
-
-Start building NOW. Don't wait until Wednesday.
-
-Good luck, see you on the track Thursday!</div>
-</div>
