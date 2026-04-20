@@ -4,3 +4,5 @@ baseurl: "/polaris-tarmo5-docs"
 url: "https://saikhurana98.github.io"
 
 markdown: kramdown
+theme: null
+plugins: []
