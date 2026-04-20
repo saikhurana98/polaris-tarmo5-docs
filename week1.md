@@ -5,7 +5,7 @@ permalink: /week1/
 ---
 
 <div class="page-header">
-  <h1>Week 1 — Build & Run</h1>
+  <h1>Week 1 — Build &amp; Run</h1>
   <div class="page-meta">
     <span class="meta-item">📅 April 20 – 24, 2026</span>
     <span class="meta-item">🏁 First run: Thursday</span>
@@ -47,7 +47,7 @@ You will need to solder motor leads, ESC connections, and battery connectors. Cl
 <ul class="resource-list">
   <li><a href="https://www.youtube.com/watch?v=Qps9woUGkvI"><span class="resource-icon">▶</span> Soldering Basics for Beginners <span class="resource-tag">YouTube</span></a></li>
   <li><a href="https://www.youtube.com/watch?v=vL4DuoKGquk"><span class="resource-icon">▶</span> How to Solder Wires Together <span class="resource-tag">YouTube</span></a></li>
-  <li><a href="https://www.youtube.com/watch?v=rK38rpUy568&t=167s"><span class="resource-icon">▶</span> Soldering Crash Course <span class="resource-tag">YouTube</span></a></li>
+  <li><a href="https://www.youtube.com/watch?v=rK38rpUy568&amp;t=167s"><span class="resource-icon">▶</span> Soldering Crash Course <span class="resource-tag">YouTube</span></a></li>
 </ul>
 
 <div class="tip-grid">
@@ -69,7 +69,7 @@ You need to understand the Tarmo5 CAD files to troubleshoot fit issues, modify p
   <li><a href="https://www.onshape.com/en/education/"><span class="resource-icon">🔗</span> Onshape Free Account Signup <span class="resource-tag">Web</span></a></li>
   <li><a href="https://learn.onshape.com/courses/fundamentals-cad-design"><span class="resource-icon">📚</span> Onshape Fundamentals — Official Course <span class="resource-tag">Course</span></a></li>
   <li><a href="https://www.youtube.com/watch?v=pMWnsHpDlQE"><span class="resource-icon">▶</span> Onshape for Beginners <span class="resource-tag">YouTube</span></a></li>
-  <li><a href="https://www.youtube.com/watch?v=XHzOzxCQ7MU&list=PLpOS1DA53WRE9vTb13N85R6Zr7I-guYBs"><span class="resource-icon">▶</span> Onshape Full Tutorial Playlist <span class="resource-tag">Playlist</span></a></li>
+  <li><a href="https://www.youtube.com/watch?v=XHzOzxCQ7MU&amp;list=PLpOS1DA53WRE9vTb13N85R6Zr7I-guYBs"><span class="resource-icon">▶</span> Onshape Full Tutorial Playlist <span class="resource-tag">Playlist</span></a></li>
   <li><a href="https://cad.onshape.com/documents/85ef3692a7037575fb488acb/w/c077c35ebf137c51bdb17e4c/e/1b4d88cd6ed5e929805daf40"><span class="resource-icon">🛠</span> Tarmo5 Onshape CAD Model <span class="resource-tag">CAD</span></a></li>
 </ul>
 
@@ -83,7 +83,7 @@ You need to understand the Tarmo5 CAD files to troubleshoot fit issues, modify p
 
 <div class="skill-header">
   <span class="skill-number">3</span>
-  <h3>Hand Tools & Fastener Basics</h3>
+  <h3>Hand Tools &amp; Fastener Basics</h3>
 </div>
 
 This sounds simple. It is not. Stripped screws and cross-threaded nylock nuts will cost you hours.
@@ -123,30 +123,23 @@ Your car will not drive straight out of the box. You need to configure your tran
   <div class="tip"><span class="tip-icon">✓</span> Failsafe (car must stop if signal is lost)</div>
 </div>
 
-<div class="callout callout-critical" markdown="1">
-
-<div class="callout-title">⚠ Critical: Controller Profiles & Backup</div>
-
-The controllers are **shared equipment** across all six teams. Every team is **required** to set up their own profile on each controller they use.
-
-**You must:**
-- Create and name your team's profile clearly
-- **Back up your profile** after every tuning session — either from the SD card or via USB cable (look up the exact procedure for your controller model)
-- **Double-verify all parameters** before every run — check your channel mappings, endpoints, trims, and failsafe settings
-
-**Why this matters:** Because controllers are shared, there is nothing stopping another team from accidentally — or intentionally — modifying your configuration. It is very difficult to lock individual profiles with a key. The organising team **will not be held responsible** if your qualifying run fails because someone changed your config.
-
-This system relies on **honour among teams. Rivals, not enemies.** Embrace that.
-
-Treat your EdgeTX configuration as equally important as the physical build of your car. A perfectly built Tarmo5 with bad software config will not complete a single lap.
-
+<div class="callout callout-critical">
+  <div class="callout-title">⚠ Critical: Controller Profiles &amp; Backup</div>
+  <p>The controllers are <strong>shared equipment</strong> across all six teams. Every team is <strong>required</strong> to set up their own profile on each controller they use.</p>
+  <p><strong>You must:</strong></p>
+  <ul>
+    <li>Create and name your team's profile clearly</li>
+    <li><strong>Back up your profile</strong> after every tuning session — either from the SD card or via USB cable (look up the exact procedure for your controller model)</li>
+    <li><strong>Double-verify all parameters</strong> before every run — check your channel mappings, endpoints, trims, and failsafe settings</li>
+  </ul>
+  <p><strong>Why this matters:</strong> Because controllers are shared, there is nothing stopping another team from accidentally — or intentionally — modifying your configuration. It is very difficult to lock individual profiles with a key. The organising team <strong>will not be held responsible</strong> if your qualifying run fails because someone changed your config.</p>
+  <p>This system relies on <strong>honour among teams. Rivals, not enemies.</strong> Embrace that.</p>
+  <p>Treat your EdgeTX configuration as equally important as the physical build of your car. A perfectly built Tarmo5 with bad software config will not complete a single lap.</p>
 </div>
 
 ---
 
 ## Tarmo5 Build Resources
-
-<div class="table-wrap">
 
 | Resource | Link |
 |----------|------|
@@ -157,8 +150,6 @@ Treat your EdgeTX configuration as equally important as the physical build of yo
 | Tarmo5 Parts Overview | [YouTube](https://www.youtube.com/watch?v=gJx0Bqjd0II) |
 | Tarmo5 on Thingiverse | [Thingiverse](https://www.thingiverse.com/thing:4579635) |
 | 3D Printing Settings | [YouTube](https://www.youtube.com/watch?v=Q3ON_8kLYGQ) |
-
-</div>
 
 ---
 
