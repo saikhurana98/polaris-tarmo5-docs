@@ -31,6 +31,7 @@ You will need to solder motor leads, ESC connections, and battery connectors. Cl
 **Resources:**
 - [Soldering Basics for Beginners (YouTube)](https://www.youtube.com/watch?v=Qps9woUGkvI)
 - [How to Solder Wires Together (YouTube)](https://www.youtube.com/watch?v=vL4DuoKGquk)
+- [Soldering Crash Course (YouTube)](https://www.youtube.com/watch?v=rK38rpUy568&t=167s)
 
 **Key Tips:**
 - Tin both surfaces before joining
@@ -47,6 +48,7 @@ You need to understand the Tarmo5 CAD files to troubleshoot fit issues, modify p
 - [Onshape Free Account Signup](https://www.onshape.com/en/education/)
 - [Onshape Fundamentals - Official Course](https://learn.onshape.com/courses/fundamentals-cad-design)
 - [Onshape for Beginners (YouTube)](https://www.youtube.com/watch?v=pMWnsHpDlQE)
+- [Onshape Full Tutorial Playlist (YouTube)](https://www.youtube.com/watch?v=XHzOzxCQ7MU&list=PLpOS1DA53WRE9vTb13N85R6Zr7I-guYBs)
 
 - [Tarmo5 Onshape CAD Model](https://cad.onshape.com/documents/85ef3692a7037575fb488acb/w/c077c35ebf137c51bdb17e4c/e/1b4d88cd6ed5e929805daf40)
 
@@ -64,6 +66,7 @@ This sounds simple. It is not. Stripped screws and cross-threaded nylock nuts wi
 **Resources:**
 - [How to Use a Screwdriver Properly (YouTube)](https://www.youtube.com/watch?v=_SBGfMZhRd8)
 - [Understanding Nylock Nuts (YouTube)](https://www.youtube.com/watch?v=K1_MbZunjOQ)
+- [Hand Tools Basics for Beginners (YouTube)](https://www.youtube.com/watch?v=kKsVUTRPM3k)
 
 **Key Tips:**
 - **Preventing cross-threading:** Start every bolt by hand (at least 2-3 turns) before using a tool. If it resists, back it out and try again.
@@ -79,6 +82,7 @@ Your car will not drive straight out of the box. You need to configure your tran
 **Resources:**
 - [EdgeTX Basics for Beginners (YouTube)](https://www.youtube.com/watch?v=xvDJDPg2Keg)
 - [RadioMaster Setup Guide (YouTube)](https://www.youtube.com/watch?v=7jNbBdUMN-c)
+- [EdgeTX Configuration Walkthrough (YouTube)](https://www.youtube.com/watch?v=CrXZO9HMGko)
 - [EdgeTX Official Documentation](https://edgetx.org/documents)
 
 **What to Configure:**
@@ -86,6 +90,21 @@ Your car will not drive straight out of the box. You need to configure your tran
 - Endpoint adjustment (limit servo travel to prevent binding)
 - Trim settings (center your steering)
 - Failsafe (car must stop if signal is lost)
+
+> **CRITICAL: Controller Profiles & Backup**
+>
+> The controllers are **shared equipment** across all six teams. Every team is **required** to set up their own profile on each controller they use.
+>
+> **You must:**
+> - Create and name your team's profile clearly
+> - **Back up your profile** after every tuning session -- either from the SD card or via USB cable (look up the exact procedure for your controller model)
+> - **Double-verify all parameters** before every run -- check your channel mappings, endpoints, trims, and failsafe settings
+>
+> **Why this matters:** Because controllers are shared, there is nothing stopping another team from accidentally -- or intentionally -- modifying your configuration. It is very difficult to lock individual profiles with a key. The organising team **will not be held responsible** if your qualifying run fails because someone changed your config.
+>
+> This system relies on **honour among teams. Rivals, not enemies.** Embrace that.
+>
+> Treat your EdgeTX configuration as equally important as the physical build of your car. A perfectly built Tarmo5 with bad software config will not complete a single lap.
 
 ---
 
