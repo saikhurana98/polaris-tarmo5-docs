@@ -8,7 +8,7 @@ permalink: /week2/
   <h1>Week 2 — Timed Laps</h1>
   <div class="page-meta">
     <span class="meta-item">📅 April 27 – May 1, 2026</span>
-    <span class="meta-item">🏁 Official run: Thursday</span>
+    <span class="meta-item">🏁 Official session: Thursday, 6 PM – 7 PM</span>
     <span class="meta-item">📍 Track: 2nd Floor</span>
     <span class="badge badge-active">Active</span>
   </div>
@@ -45,9 +45,9 @@ Last week was a grace period. Most teams struggled to get their cars running rel
 
 ## This Week's Challenge
 
-Complete a session of **3 timed laps in succession** on the 2nd floor track by Thursday.
+Complete a session of **3 timed laps in succession** during Thursday's official 1-hour session (**6 PM – 7 PM**, 2nd floor track).
 
-This is no longer just about finishing. Your laps will be **timed**, and consistency matters. The car must complete all 3 laps without stopping, without being touched, and without leaving the track.
+You have that one hour to set your laps. There are no make-ups or extensions — if you don't get it done within the session window, it doesn't count. This is no longer just about finishing. Your laps will be **timed**, and consistency matters. The car must complete all 3 laps without stopping, without being touched, and without leaving the track.
 
 ---
 
@@ -108,14 +108,32 @@ If your car DNF'd last week, you already know what needs fixing. Here's what sep
 
 ---
 
-## Rules for Thursday's Run
+## Official Session — Thursday, 6 PM – 7 PM
+
+<div class="info-row">
+  <div class="info-item">
+    <div class="info-label">Session Window</div>
+    <div class="info-value">6 PM – 7 PM</div>
+  </div>
+  <div class="info-item">
+    <div class="info-label">Location</div>
+    <div class="info-value">2nd Floor Track</div>
+  </div>
+  <div class="info-item">
+    <div class="info-label">Duration</div>
+    <div class="info-value">1 Hour</div>
+  </div>
+</div>
+
+All laps must be set **within the 1-hour session window**. No exceptions.
 
 <ol class="rules">
-  <li>Each team gets <strong>one attempt</strong> at a time, rotating through teams.</li>
+  <li>The official session runs from <strong>6:00 PM to 7:00 PM</strong> sharp. Laps set outside this window do not count.</li>
+  <li>Teams rotate through attempts. You may attempt multiple runs within the hour.</li>
   <li>The car must complete <strong>3 laps in succession</strong> without stopping or being touched.</li>
-  <li>Each lap is <strong>individually timed</strong>. Your best session is recorded.</li>
+  <li>Each lap is <strong>individually timed</strong>. Your best session of 3 consecutive laps is recorded.</li>
   <li>The out lap does not count.</li>
-  <li>If the car leaves the track, the attempt is void.</li>
+  <li>If the car leaves the track, that attempt is void — but you can try again if time permits.</li>
   <li>Teams that fail to complete 3 laps will <strong>lose points</strong> on the rubric — not immediate disqualification.</li>
   <li>The new <strong>points rubric</strong> will be shared separately this week.</li>
 </ol>
