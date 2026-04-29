@@ -11,14 +11,28 @@ title: Home
 
 <div class="section">
   <div class="section-label">Current Week</div>
-  <a href="{{ '/week1/' | relative_url }}" class="week-card">
+  <a href="{{ '/week2/' | relative_url }}" class="week-card">
     <div class="week-card-content">
-      <div class="week-card-title">Week 1 — Build &amp; Run</div>
-      <div class="week-card-desc">Build the Tarmo5 and complete 3 consecutive laps on the 2nd floor track</div>
+      <div class="week-card-title">Week 2 — Timed Laps</div>
+      <div class="week-card-desc">Complete 3 timed laps in succession. Points rubric now in effect.</div>
     </div>
     <div class="week-card-meta">
       <span class="badge badge-active">Active</span>
-      <div class="week-card-date">Due Apr 24</div>
+      <div class="week-card-date">Due May 1</div>
+    </div>
+    <span class="week-card-arrow">→</span>
+  </a>
+</div>
+
+<div class="section">
+  <div class="section-label">Previous Weeks</div>
+  <a href="{{ '/week1/' | relative_url }}" class="week-card">
+    <div class="week-card-content">
+      <div class="week-card-title">Week 1 — Build &amp; Run</div>
+      <div class="week-card-desc">Build the Tarmo5 and complete 3 consecutive laps. 1 team completed 1 lap, rest DNF'd.</div>
+    </div>
+    <div class="week-card-meta">
+      <span class="badge badge-warn">Completed</span>
     </div>
     <span class="week-card-arrow">→</span>
   </a>

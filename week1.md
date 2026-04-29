@@ -10,7 +10,7 @@ permalink: /week1/
     <span class="meta-item">📅 April 20 – 24, 2026</span>
     <span class="meta-item">🏁 First run: Thursday</span>
     <span class="meta-item">📍 Track: 2nd Floor</span>
-    <span class="badge badge-active">Active</span>
+    <span class="badge badge-warn">Completed</span>
   </div>
 </div>
 
