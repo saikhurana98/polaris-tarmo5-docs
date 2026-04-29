@@ -41,6 +41,13 @@ permalink: /week2/
 
 Last week was a grace period. Most teams struggled to get their cars running reliably — and that is understandable for a first build. But the competition is now moving forward, and the expectations are rising.
 
+Two other patterns from Week 1 that need to change:
+
+<div class="tip-grid">
+  <div class="tip"><span class="tip-icon">✓</span> <strong>Teams were not practicing enough.</strong> The track on the 2nd floor is <strong>open at all times</strong>. There is no reason to show up on Thursday having never driven your car on the actual track. Use the track. Run laps. Find problems before they cost you points.</div>
+  <div class="tip"><span class="tip-icon">✓</span> <strong>Teams did not have spare parts on hand.</strong> Parts break — that is a given with RC cars. If a steering knuckle snaps or a wheel hub cracks during practice, you need a replacement ready, not a 2-day reprint. Print spares of your most fragile parts <strong>now</strong>, before something breaks on race day.</div>
+</div>
+
 ---
 
 ## This Week's Challenge
@@ -82,6 +89,8 @@ If your car DNF'd last week, you already know what needs fixing. Here's what sep
   <div class="tip"><span class="tip-icon">✓</span> <strong>Re-check your soldering:</strong> If a joint looked questionable last week, redo it now. Cold joints fail under sustained load.</div>
   <div class="tip"><span class="tip-icon">✓</span> <strong>EdgeTX tuning:</strong> Reduce your throttle endpoint if the car is too fast to control. Smooth inputs matter more than raw speed.</div>
   <div class="tip"><span class="tip-icon">✓</span> <strong>Battery management:</strong> Run your laps on a fully charged battery. Know your run time so the car doesn't die mid-session.</div>
+  <div class="tip"><span class="tip-icon">✓</span> <strong>Practice on the actual track:</strong> The track is open at all times. Run your car there before Thursday — not just on a flat floor. Learn the corners, find the grip limits, and sort out problems in practice, not during your timed session.</div>
+  <div class="tip"><span class="tip-icon">✓</span> <strong>Have spare parts ready:</strong> Print duplicates of fragile parts (steering knuckles, wheel hubs, bumper mounts). A 5-minute part swap beats a DNF because you had nothing to replace a broken piece with.</div>
 </div>
 
 <div class="callout callout-critical">
@@ -96,6 +105,8 @@ If your car DNF'd last week, you already know what needs fixing. Here's what sep
 
 <ul class="checklist">
   <li><span class="check-box"></span> All Week 1 issues identified and fixed</li>
+  <li><span class="check-box"></span> Spare parts printed (steering knuckles, wheel hubs, fragile components)</li>
+  <li><span class="check-box"></span> Practice laps completed on the actual 2nd floor track</li>
   <li><span class="check-box"></span> All screws and fasteners re-tightened</li>
   <li><span class="check-box"></span> Solder joints inspected and redone if needed</li>
   <li><span class="check-box"></span> Steering and drivetrain tested — no binding</li>
