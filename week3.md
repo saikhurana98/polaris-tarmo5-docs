@@ -86,6 +86,52 @@ Only links from these three vendors will be accepted. No exceptions.
 
 ---
 
+## Upgrade Rules
+
+<div class="callout callout-critical">
+  <div class="callout-title">⚠ Read This Carefully</div>
+  <p>Any and every upgrade is legal — as long as you follow these two rules:</p>
+  <ol>
+    <li><strong>Parts must come from the kit or this week's budget.</strong> You may only use parts that were supplied in your original kit or purchased using the ₹1,000 budget. Personally sponsored upgrades are <strong>not allowed</strong>.</li>
+    <li><strong>1 KG limit on 3D-printed parts</strong> (any material). Each team has a total allowance of 1 KG of 3D-printed parts. Plan accordingly.</li>
+  </ol>
+</div>
+
+### 3D Printing Process
+
+Prints will happen in batches:
+- **1 overnight batch**
+- **1 morning batch**
+- **Bonus batches** if the printer is available
+
+To request a print, you must submit:
+- The **STL or STEP file** (not a verbal description)
+- Your chosen **print parameters**: wall loops, top/bottom fill layers, infill pattern and density, print orientation, and support settings
+
+<div class="callout callout-critical">
+  <div class="callout-title">⚠ No More Vague Print Requests</div>
+  <p>Asking Kushal or Yatin to "print a pinion gear in PETG" is <strong>no longer a valid request</strong>. Every team is responsible for selecting the correct file and specifying their own print parameters.</p>
+  <p>If you don't know how to set print parameters, there are plenty of resources online. This is your responsibility — learn it.</p>
+</div>
+
+---
+
+## The Free Upgrade — EdgeTX Tuning
+
+Before you spend a single rupee, look at your controller. Most of your comfort and control with the car is hidden deep inside **EdgeTX**. These are free upgrades that can transform how your car drives.
+
+<div class="tip-grid">
+  <div class="tip"><span class="tip-icon">✓</span> <strong>Throttle curve:</strong> You don't need linear throttle. Apply an exponential curve so low-throttle inputs give you finer control, and full throttle is still available when you need it.</div>
+  <div class="tip"><span class="tip-icon">✓</span> <strong>Steering input curve:</strong> Same idea — reduce sensitivity around centre for smoother steering, while keeping full lock available at the extremes.</div>
+  <div class="tip"><span class="tip-icon">✓</span> <strong>Steering-throttle mix:</strong> Apply a steering input modifier based on throttle position. At high speed, reduce your steering travel automatically to prevent snap oversteer.</div>
+  <div class="tip"><span class="tip-icon">✓</span> <strong>Sensitivity tuning:</strong> Given the track width and car size, your default input range is probably too aggressive. Narrow it to a comfortable window. Small adjustments here make a massive difference.</div>
+  <div class="tip"><span class="tip-icon">✓</span> <strong>Dual rates / flight modes:</strong> Set up multiple driving profiles — one for practice (lower sensitivity) and one for timed runs. EdgeTX can switch between them with a toggle.</div>
+</div>
+
+EdgeTX can do basically anything you can imagine. These are the easiest wins you'll get this week — and they cost nothing.
+
+---
+
 ## CAD &amp; Design — Fusion 360 x Claude
 
 This week, Anthropic released their **native integration for Fusion 360**. If you're redesigning parts, this is the perfect time to get hands-on with parametric CAD.
@@ -141,9 +187,11 @@ Whether you're modifying a steering knuckle for better clearance, designing a re
 
 <ul class="checklist">
   <li><span class="check-box"></span> Identified key failure points from Weeks 1 &amp; 2</li>
+  <li><span class="check-box"></span> EdgeTX tuned — throttle curve, steering curve, sensitivity</li>
   <li><span class="check-box"></span> Designed modifications in CAD (Fusion 360 or Onshape)</li>
   <li><span class="check-box"></span> Parts links submitted to organisers (Sunday EOD)</li>
-  <li><span class="check-box"></span> Modified parts printed and test-fitted</li>
+  <li><span class="check-box"></span> 3D print requests submitted with STL/STEP + print parameters</li>
+  <li><span class="check-box"></span> Modified parts printed, test-fitted, within 1 KG limit</li>
   <li><span class="check-box"></span> Spare parts printed for all modified components</li>
   <li><span class="check-box"></span> Ordered parts received and installed (Tuesday)</li>
   <li><span class="check-box"></span> Practice laps completed on 2nd floor track with modifications</li>
