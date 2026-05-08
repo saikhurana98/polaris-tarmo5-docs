@@ -43,7 +43,8 @@ If you have been coasting, the room is about to find out.
 
 <div class="callout callout-critical">
   <div class="callout-title">⚠ Format Change — 5 Laps + Track Limits</div>
-  <p>Both sessions step up to <strong>5 consecutive timed laps</strong> — not 3. <strong>Proper track limits</strong> will also be enforced. Going off-track is no longer just an inconvenience — it counts.</p>
+  <p>Both sessions step up to <strong>5 consecutive timed laps</strong> — not 3. <strong>Proper track limits</strong> will also be enforced.</p>
+  <p>How track limits work: each run, you are allowed <strong>3 track-limit violations</strong>. If your car goes off-track, you may rejoin and continue — but the <strong>4th violation deletes your lap time</strong> and you must restart the session.</p>
   <p>This is a significant difference from Week 2 and 3. <strong>Get your practice in.</strong> The track is open at all times, and the Innovation Lab is open Saturday (and possibly Sunday) for prep work.</p>
 </div>
 
@@ -140,7 +141,6 @@ The 2nd floor track remains open at all times. There is no excuse for showing up
 <div class="callout callout-critical">
   <div class="callout-title">⚠ Final Reminders</div>
   <p>Controllers are still <strong>shared equipment</strong>. Back up your EdgeTX profile. Verify settings before every run. The organising team is not responsible for tampered configs.</p>
-  <p>Underperforming teams and individuals <strong>have already been put on notice</strong>. The cut is real.</p>
   <p><strong>Rivals, not enemies.</strong> Help each other where you can. Compete where it counts.</p>
 </div>
 
@@ -171,7 +171,6 @@ The 2nd floor track remains open at all times. There is no excuse for showing up
   <li>The car must complete <strong>5 laps in succession</strong> without stopping or being touched. (Up from 3.)</li>
   <li>Each lap is <strong>individually timed</strong>. Best 5-lap session is recorded.</li>
   <li>The out lap does not count.</li>
-  <li><strong>Track limits are enforced.</strong> If the car goes off-track, the attempt is voided — retry if time permits.</li>
+  <li><strong>Track limits:</strong> Each run, you are allowed up to <strong>3 violations</strong> — go off-track, rejoin, keep going. On the <strong>4th violation</strong>, your lap time is <strong>deleted</strong> and you must restart the session.</li>
   <li>Both sessions score against the rubric. Final standings combine the two.</li>
-  <li>Underperforming teams and individuals <strong>face disqualification</strong>. The cut is real.</li>
 </ol>
