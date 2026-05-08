@@ -1,6 +1,6 @@
 ---
 layout: default
-title: "Finals: Qualifier & Final Session"
+title: "Finals: Semi Finals & Final"
 permalink: /finals/
 ---
 
@@ -8,7 +8,7 @@ permalink: /finals/
   <h1>Finals — This Is It</h1>
   <div class="page-meta">
     <span class="meta-item">📅 May 11 – 13, 2026</span>
-    <span class="meta-item">🏁 Qualifier: Monday · Final: Wednesday</span>
+    <span class="meta-item">🏁 Semi Finals: Monday · Final: Wednesday</span>
     <span class="meta-item">📍 Track: 2nd Floor</span>
     <span class="badge badge-active">Active</span>
   </div>
@@ -20,7 +20,7 @@ permalink: /finals/
     <div class="info-value">5 Timed Laps</div>
   </div>
   <div class="info-item">
-    <div class="info-label">Qualifier</div>
+    <div class="info-label">Semi Finals</div>
     <div class="info-value">Monday, 6–7 PM</div>
   </div>
   <div class="info-item">
@@ -53,7 +53,7 @@ If you have been coasting, the room is about to find out.
 
 <div class="card-grid">
   <div class="card-sm">
-    <h4>Qualifier</h4>
+    <h4>Semi Finals</h4>
     <p><strong>Monday, 6 PM – 7 PM</strong><br>2nd Floor Track. Campus and external guests in attendance. Set your benchmark.</p>
   </div>
   <div class="card-sm">
@@ -73,25 +73,20 @@ Both sessions are public. Both sessions count. Both sessions will be closely sco
   <p>Only the <strong>top team</strong> wins. There are no second or third place prizes.</p>
 </div>
 
-The winning team gets:
+Prize details will be announced separately. What's confirmed: it is worth showing up for, and only the top team gets it.
 
-### Build a Custom FPV Quad — Goggles On, Throttle Wide
+If you want it, the next 6 days are everything.
 
-<div class="callout callout-critical">
-  <div class="callout-title">★ The Big Prize</div>
-  <p>This is not a toy drone. This is not a DJI you take out of a box. The winning team will hand-build a <strong>full carbon-frame FPV quadcopter</strong> — brushless motors, custom flight controller, your own tune.</p>
-  <p>Then you strap on the goggles and fly it. First-person view. Sub-250-gram class capable of speeds that turn a Tarmo5 into a desk toy. The kind of machine you punch through gaps with, send through gates, freestyle off ledges.</p>
-  <p>You build it. You tune it. You fly it. You keep it. Most people will never touch a machine like this — you'll have built one with your own hands.</p>
-</div>
+---
 
-### Plus a Day at the Go-Kart Track
+## Budget — Use What You Have
 
 <div class="callout callout-critical">
-  <div class="callout-title">★ Bonus</div>
-  <p>A full day on real karts. Helmets on, suits zipped, telemetry running. After three weeks of millimetre-scale RC racing, you graduate to the real thing — proper machines, proper g-forces, proper lap times.</p>
+  <div class="callout-title">⚠ No New Allotments This Week</div>
+  <p>Last week's <strong>₹1,000 budget went almost entirely unused</strong>. Not a single team came close to spending it.</p>
+  <p>Because of that, there will be <strong>no new budget allotment</strong> this week. However, every team can <strong>still use whatever was unspent</strong> from Week 3's ₹1,000 allowance.</p>
+  <p>Same vendors as last week — Sharvi Electronics, Probots India, Robocraze. Same process: send links to the organising team. Last call for orders if you actually want parts before the Final.</p>
 </div>
-
-If you want this, the next 6 days are everything.
 
 ---
 

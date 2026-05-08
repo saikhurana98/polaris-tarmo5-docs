@@ -13,8 +13,8 @@ title: Home
   <div class="section-label">Current Week — Finals</div>
   <a href="{{ '/finals/' | relative_url }}" class="week-card">
     <div class="week-card-content">
-      <div class="week-card-title">Finals — Qualifier &amp; Final</div>
-      <div class="week-card-desc">5 timed laps with track limits. Two public sessions. Winner builds a custom FPV quad and earns a day at the go-kart track.</div>
+      <div class="week-card-title">Finals — Semi Finals &amp; Final</div>
+      <div class="week-card-desc">5 timed laps with track limits. Two public sessions. Winner takes all — prize details to be announced.</div>
     </div>
     <div class="week-card-meta">
       <span class="badge badge-active">Active</span>
