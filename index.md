@@ -10,15 +10,15 @@ title: Home
 </div>
 
 <div class="section">
-  <div class="section-label">Current Week</div>
-  <a href="{{ '/week3/' | relative_url }}" class="week-card">
+  <div class="section-label">Current Week — Finals</div>
+  <a href="{{ '/finals/' | relative_url }}" class="week-card">
     <div class="week-card-content">
-      <div class="week-card-title">Week 3 — Modifications</div>
-      <div class="week-card-desc">Redesign, upgrade, and modify your car. ₹1,000 budget per team. Parts deadline: Sunday EOD.</div>
+      <div class="week-card-title">Finals — Penultimate &amp; Final Sessions</div>
+      <div class="week-card-desc">5 timed laps with track limits. Two sessions, public crowd. Winner takes all — FPV drone build + go-kart day.</div>
     </div>
     <div class="week-card-meta">
       <span class="badge badge-active">Active</span>
-      <div class="week-card-date">Due May 8</div>
+      <div class="week-card-date">Mon &amp; Thu</div>
     </div>
     <span class="week-card-arrow">→</span>
   </a>
@@ -26,6 +26,16 @@ title: Home
 
 <div class="section">
   <div class="section-label">Previous Weeks</div>
+  <a href="{{ '/week3/' | relative_url }}" class="week-card">
+    <div class="week-card-content">
+      <div class="week-card-title">Week 3 — Modifications</div>
+      <div class="week-card-desc">Redesign and upgrade. ₹1,000 per team. Fusion 360 x Claude integration.</div>
+    </div>
+    <div class="week-card-meta">
+      <span class="badge badge-warn">Completed</span>
+    </div>
+    <span class="week-card-arrow">→</span>
+  </a>
   <a href="{{ '/week2/' | relative_url }}" class="week-card">
     <div class="week-card-content">
       <div class="week-card-title">Week 2 — Timed Laps</div>

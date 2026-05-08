@@ -10,7 +10,7 @@ permalink: /week3/
     <span class="meta-item">📅 May 4 – 8, 2026</span>
     <span class="meta-item">🏁 Official session: Thursday, 6 PM – 7 PM</span>
     <span class="meta-item">📍 Track: 2nd Floor</span>
-    <span class="badge badge-active">Active</span>
+    <span class="badge badge-warn">Completed</span>
   </div>
 </div>
 
