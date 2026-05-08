@@ -14,7 +14,7 @@ title: Home
   <a href="{{ '/finals/' | relative_url }}" class="week-card">
     <div class="week-card-content">
       <div class="week-card-title">Finals — Semi Finals &amp; Final</div>
-      <div class="week-card-desc">5 timed laps with track limits. Two public sessions. Winner takes ₹2K per member + sponsored hardware projects for Summer &amp; Monsoon.</div>
+      <div class="week-card-desc">5 timed laps with track limits. Two public sessions. Winner takes ₹2K per individual + a sponsored hardware project (Summer or Monsoon).</div>
     </div>
     <div class="week-card-meta">
       <span class="badge badge-active">Active</span>
