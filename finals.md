@@ -73,9 +73,22 @@ Both sessions are public. Both sessions count. Both sessions will be closely sco
   <p>Only the <strong>top team</strong> wins. There are no second or third place prizes.</p>
 </div>
 
-Prize details will be announced separately. What's confirmed: it is worth showing up for, and only the top team gets it.
+The winning team gets:
 
-If you want it, the next 6 days are everything.
+<div class="card-grid">
+  <div class="card-sm">
+    <h4>₹2,000 per Member</h4>
+    <p>Cash to every individual on the winning team. Not a shared team pot — every member, paid out individually.</p>
+  </div>
+  <div class="card-sm">
+    <h4>Sponsored Hardware Projects</h4>
+    <p>Two full semesters of sponsored hardware builds — Summer and Monsoon. Funded projects, real making, no out-of-pocket spending on parts.</p>
+  </div>
+</div>
+
+The cash is the small part. The real prize is the **two semesters of sponsored hardware projects** — funded build budgets across Summer and Monsoon. Most students never get a single sponsored project. The winning team gets two consecutive semesters of them.
+
+If you want this, the next 6 days are everything.
 
 ---
 
