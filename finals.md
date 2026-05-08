@@ -1,6 +1,6 @@
 ---
 layout: default
-title: "Finals: Penultimate & Final Session"
+title: "Finals: Qualifier & Final Session"
 permalink: /finals/
 ---
 
@@ -8,7 +8,7 @@ permalink: /finals/
   <h1>Finals — This Is It</h1>
   <div class="page-meta">
     <span class="meta-item">📅 May 11 – 13, 2026</span>
-    <span class="meta-item">🏁 Penultimate: Monday · Final: Wednesday</span>
+    <span class="meta-item">🏁 Qualifier: Monday · Final: Wednesday</span>
     <span class="meta-item">📍 Track: 2nd Floor</span>
     <span class="badge badge-active">Active</span>
   </div>
@@ -20,7 +20,7 @@ permalink: /finals/
     <div class="info-value">5 Timed Laps</div>
   </div>
   <div class="info-item">
-    <div class="info-label">Penultimate</div>
+    <div class="info-label">Qualifier</div>
     <div class="info-value">Monday, 6–7 PM</div>
   </div>
   <div class="info-item">
@@ -53,12 +53,12 @@ If you have been coasting, the room is about to find out.
 
 <div class="card-grid">
   <div class="card-sm">
-    <h4>Penultimate Session</h4>
-    <p><strong>Monday, 6 PM – 7 PM</strong><br>2nd Floor Track. Campus and external guests in attendance.</p>
+    <h4>Qualifier</h4>
+    <p><strong>Monday, 6 PM – 7 PM</strong><br>2nd Floor Track. Campus and external guests in attendance. Set your benchmark.</p>
   </div>
   <div class="card-sm">
-    <h4>Final Session</h4>
-    <p><strong>Thursday, 6 PM – 7 PM</strong><br>2nd Floor Track. The last run. No more chances after this.</p>
+    <h4>Final</h4>
+    <p><strong>Wednesday, 6 PM – 7 PM</strong><br>2nd Floor Track. The last run. No more chances after this.</p>
   </div>
 </div>
 
@@ -75,15 +75,20 @@ Both sessions are public. Both sessions count. Both sessions will be closely sco
 
 The winning team gets:
 
-<div class="card-grid">
-  <div class="card-sm">
-    <h4>FPV Drone Build</h4>
-    <p>An exclusive opportunity to take your making skills to the next level — build a really fast FPV drone with the team.</p>
-  </div>
-  <div class="card-sm">
-    <h4>Day at the Go-Kart Track</h4>
-    <p>A full day at a nearby go-kart track. Real machines, real speed, real fun.</p>
-  </div>
+### Build a Custom FPV Quad — Goggles On, Throttle Wide
+
+<div class="callout callout-critical">
+  <div class="callout-title">★ The Big Prize</div>
+  <p>This is not a toy drone. This is not a DJI you take out of a box. The winning team will hand-build a <strong>full carbon-frame FPV quadcopter</strong> — brushless motors, custom flight controller, your own tune.</p>
+  <p>Then you strap on the goggles and fly it. First-person view. Sub-250-gram class capable of speeds that turn a Tarmo5 into a desk toy. The kind of machine you punch through gaps with, send through gates, freestyle off ledges.</p>
+  <p>You build it. You tune it. You fly it. You keep it. Most people will never touch a machine like this — you'll have built one with your own hands.</p>
+</div>
+
+### Plus a Day at the Go-Kart Track
+
+<div class="callout callout-critical">
+  <div class="callout-title">★ Bonus</div>
+  <p>A full day on real karts. Helmets on, suits zipped, telemetry running. After three weeks of millimetre-scale RC racing, you graduate to the real thing — proper machines, proper g-forces, proper lap times.</p>
 </div>
 
 If you want this, the next 6 days are everything.
@@ -116,7 +121,7 @@ The 2nd floor track remains open at all times. There is no excuse for showing up
 ## What Wins From Here
 
 <div class="tip-grid">
-  <div class="tip"><span class="tip-icon">✓</span> <strong>Reliability over everything.</strong> A car that finishes 3 clean laps will outscore a fast car that breaks. The crowd remembers DNFs.</div>
+  <div class="tip"><span class="tip-icon">✓</span> <strong>Reliability over everything.</strong> A car that finishes 5 clean laps will outscore a fast car that breaks. The crowd remembers DNFs.</div>
   <div class="tip"><span class="tip-icon">✓</span> <strong>EdgeTX is your edge.</strong> If you have not tuned throttle curves, steering curves, and sensitivity by now, do it tomorrow. It is free, and it is the single biggest improvement you can make.</div>
   <div class="tip"><span class="tip-icon">✓</span> <strong>Drive the actual track.</strong> Practice on flat floors does not translate. The 2nd floor track has corners, walls, and surfaces your car needs to know.</div>
   <div class="tip"><span class="tip-icon">✓</span> <strong>Spare every fragile part.</strong> Bring backups for everything. A 5-minute repair between attempts can save the run.</div>
