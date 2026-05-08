@@ -18,7 +18,7 @@ title: Home
     </div>
     <div class="week-card-meta">
       <span class="badge badge-active">Active</span>
-      <div class="week-card-date">Mon &amp; Thu</div>
+      <div class="week-card-date">Mon &amp; Wed</div>
     </div>
     <span class="week-card-arrow">→</span>
   </a>

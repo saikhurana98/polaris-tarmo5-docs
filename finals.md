@@ -7,8 +7,8 @@ permalink: /finals/
 <div class="page-header">
   <h1>Finals — This Is It</h1>
   <div class="page-meta">
-    <span class="meta-item">📅 May 11 – 14, 2026</span>
-    <span class="meta-item">🏁 Penultimate: Monday · Final: Thursday</span>
+    <span class="meta-item">📅 May 11 – 13, 2026</span>
+    <span class="meta-item">🏁 Penultimate: Monday · Final: Wednesday</span>
     <span class="meta-item">📍 Track: 2nd Floor</span>
     <span class="badge badge-active">Active</span>
   </div>
@@ -25,7 +25,7 @@ permalink: /finals/
   </div>
   <div class="info-item">
     <div class="info-label">Final</div>
-    <div class="info-value">Thursday, 6–7 PM</div>
+    <div class="info-value">Wednesday, 6–7 PM</div>
   </div>
 </div>
 
@@ -33,7 +33,7 @@ permalink: /finals/
 
 ## It All Comes Down to This
 
-Two sessions. Two chances. After Thursday, it's over.
+Two sessions. Two chances. After Wednesday, it's over.
 
 The **entire campus** will be invited to watch your performance. **External visitors** will be in the room. This is as real as it gets — your car runs in front of a live crowd, not just the organising team.
 
