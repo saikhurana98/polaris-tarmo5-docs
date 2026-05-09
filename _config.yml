@@ -6,3 +6,9 @@ url: "https://saikhurana98.github.io"
 markdown: kramdown
 theme: null
 plugins: []
+
+exclude:
+  - mockup.html
+  - event-mockup.html
+  - "PolarisGP Announcement.pdf"
+  - README.md

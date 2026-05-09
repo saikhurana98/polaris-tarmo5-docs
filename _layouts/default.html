@@ -1,126 +1,151 @@
 <!DOCTYPE html>
-<html lang="en" data-theme="light">
+<html lang="en">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>{% if page.title %}{{ page.title }} | {% endif %}{{ site.title }}</title>
-  <meta name="description" content="{{ site.description }}">
+  <meta name="description" content="{{ page.description | default: site.description }}">
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;0,9..40,800;1,9..40,400&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@200;300;400;500;600;700&family=Nunito:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400&display=swap" rel="stylesheet">
 
   <link rel="stylesheet" href="{{ '/assets/css/main.css' | relative_url }}">
-
-  <script>
-    (function() {
-      var saved = localStorage.getItem('polaris-theme');
-      var preferred = saved || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
-      document.documentElement.setAttribute('data-theme', preferred);
-    })();
-  </script>
 </head>
 <body>
+
+  <svg class="bg-pattern" aria-hidden="true" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+      <pattern id="iconPattern" patternUnits="userSpaceOnUse" width="400" height="240">
+        <!-- COL 1 (x=50, odd) -->
+        <g transform="translate(50 40)" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linejoin="round" stroke-linecap="round">
+          <path d="M -20 4 Q -16 -3, -4 -3 L 3 -9 L 13 -9 Q 17 -7, 19 -2 L 19 4 Z"/>
+          <line x1="19" y1="-2" x2="22" y2="-8"/><line x1="18" y1="-8" x2="25" y2="-8"/>
+          <line x1="-22" y1="4" x2="-18" y2="4"/><line x1="-24" y1="2" x2="-18" y2="2"/>
+          <circle cx="-13" cy="5" r="4"/><circle cx="13" cy="5" r="4"/>
+        </g>
+        <g transform="translate(50 120)" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linejoin="round">
+          <path d="M -13 6 Q -13 -13, 4 -13 Q 13 -13, 13 -3 L 13 4 Q 13 6, 11 6 Z"/>
+          <line x1="-9" y1="-3" x2="11" y2="-3" stroke-width="3"/>
+          <line x1="-13" y1="2" x2="13" y2="2"/>
+        </g>
+        <g transform="translate(50 200)" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round">
+          <circle r="13"/>
+          <line x1="0" y1="-13" x2="0" y2="-17"/><line x1="-3" y1="-17" x2="3" y2="-17"/>
+          <line x1="-9" y1="-9" x2="-11" y2="-11"/><line x1="9" y1="-9" x2="11" y2="-11"/>
+          <line x1="0" y1="0" x2="0" y2="-7"/><line x1="0" y1="0" x2="6" y2="3"/>
+        </g>
+        <!-- COL 2 (x=150, even, half-dropped — seam icon at top + bottom) -->
+        <g transform="translate(150 0) rotate(-8)" fill="none" stroke="currentColor" stroke-width="1.2">
+          <line x1="-11" y1="-13" x2="-11" y2="16"/>
+          <rect x="-11" y="-13" width="22" height="13"/>
+          <g fill="currentColor" stroke="none">
+            <rect x="-11" y="-13" width="5.5" height="3.25"/><rect x="0" y="-13" width="5.5" height="3.25"/>
+            <rect x="-5.5" y="-9.75" width="5.5" height="3.25"/>
+            <rect x="-11" y="-6.5" width="5.5" height="3.25"/><rect x="0" y="-6.5" width="5.5" height="3.25"/>
+            <rect x="-5.5" y="-3.25" width="5.5" height="3.25"/>
+          </g>
+        </g>
+        <g transform="translate(150 240) rotate(-8)" fill="none" stroke="currentColor" stroke-width="1.2">
+          <line x1="-11" y1="-13" x2="-11" y2="16"/>
+          <rect x="-11" y="-13" width="22" height="13"/>
+          <g fill="currentColor" stroke="none">
+            <rect x="-11" y="-13" width="5.5" height="3.25"/><rect x="0" y="-13" width="5.5" height="3.25"/>
+            <rect x="-5.5" y="-9.75" width="5.5" height="3.25"/>
+            <rect x="-11" y="-6.5" width="5.5" height="3.25"/><rect x="0" y="-6.5" width="5.5" height="3.25"/>
+            <rect x="-5.5" y="-3.25" width="5.5" height="3.25"/>
+          </g>
+        </g>
+        <g transform="translate(150 80)" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linejoin="round">
+          <path d="M -14 -6 Q -14 -10, -10 -10 L 10 -10 Q 14 -10, 14 -6 L 14 6 Q 14 10, 10 10 L -10 10 Q -14 10, -14 6 Z"/>
+          <rect x="-7" y="-5" width="14" height="6" fill="currentColor" stroke="none"/>
+          <circle cy="6" r="1.6" fill="currentColor" stroke="none"/>
+          <line x1="-12" y1="-2" x2="-9" y2="-2"/><line x1="9" y1="-2" x2="12" y2="-2"/>
+        </g>
+        <g transform="translate(150 160)" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linejoin="round">
+          <rect x="-5" y="-12" width="10" height="20"/>
+          <rect x="-15" y="-4" width="10" height="12"/>
+          <rect x="5" y="0" width="10" height="8"/>
+          <text x="0" y="0" font-family="Oswald, sans-serif" font-weight="700" font-size="9" text-anchor="middle" fill="currentColor" stroke="none">1</text>
+          <text x="-10" y="6" font-family="Oswald, sans-serif" font-weight="700" font-size="8" text-anchor="middle" fill="currentColor" stroke="none">2</text>
+          <text x="10" y="7" font-family="Oswald, sans-serif" font-weight="700" font-size="7" text-anchor="middle" fill="currentColor" stroke="none">3</text>
+        </g>
+        <!-- COL 3 (x=250, odd) -->
+        <g transform="translate(250 40)" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linejoin="round">
+          <path d="M -7 -13 L 7 -13 L 7 -5 Q 7 4, 0 4 Q -7 4, -7 -5 Z"/>
+          <path d="M -7 -10 Q -12 -10, -12 -5 Q -12 -1, -8 0"/>
+          <path d="M 7 -10 Q 12 -10, 12 -5 Q 12 -1, 8 0"/>
+          <line x1="0" y1="4" x2="0" y2="9"/>
+          <line x1="-5" y1="13" x2="5" y2="13"/><line x1="-3" y1="9" x2="3" y2="9"/>
+        </g>
+        <g transform="translate(250 120) rotate(15)" fill="none" stroke="currentColor" stroke-width="1.2">
+          <circle r="14"/><circle r="9"/><circle r="3" fill="currentColor" stroke="none"/>
+          <line x1="0" y1="-9" x2="0" y2="-3"/>
+          <line x1="8.6" y1="-2.8" x2="2.85" y2="-0.93"/>
+          <line x1="5.3" y1="7.3" x2="1.76" y2="2.43"/>
+          <line x1="-5.3" y1="7.3" x2="-1.76" y2="2.43"/>
+          <line x1="-8.6" y1="-2.8" x2="-2.85" y2="-0.93"/>
+        </g>
+        <g transform="translate(250 200)" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linejoin="round">
+          <rect x="-13" y="-9" width="26" height="14" rx="1.5"/>
+          <text x="0" y="2" font-family="Oswald, sans-serif" font-weight="700" font-size="9" text-anchor="middle" fill="currentColor" stroke="none">DRS</text>
+          <line x1="0" y1="5" x2="0" y2="13"/><line x1="-4" y1="13" x2="4" y2="13"/>
+        </g>
+        <!-- COL 4 (x=350, even, half-dropped — seam icon at top + bottom) -->
+        <g transform="translate(350 0)" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M -14 -10 Q -14 -2, -6 -2 L 6 -2 Q 14 -2, 14 6 L 14 12"/>
+          <line x1="-14" y1="-13" x2="-14" y2="-7" stroke-width="2.5"/>
+          <line x1="-16" y1="-13" x2="-12" y2="-13" stroke-width="2.5"/>
+          <circle cx="14" cy="13" r="1.8" fill="currentColor" stroke="none"/>
+        </g>
+        <g transform="translate(350 240)" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M -14 -10 Q -14 -2, -6 -2 L 6 -2 Q 14 -2, 14 6 L 14 12"/>
+          <line x1="-14" y1="-13" x2="-14" y2="-7" stroke-width="2.5"/>
+          <line x1="-16" y1="-13" x2="-12" y2="-13" stroke-width="2.5"/>
+          <circle cx="14" cy="13" r="1.8" fill="currentColor" stroke="none"/>
+        </g>
+        <g transform="translate(350 80)" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linejoin="round">
+          <path d="M -16 0 L -10 -6 L 10 -6 L 16 0 L 16 4 L -16 4 Z"/>
+          <line x1="-10" y1="-6" x2="-10" y2="-13"/><line x1="-3" y1="-6" x2="-3" y2="-13"/>
+          <line x1="3" y1="-6" x2="3" y2="-13"/><line x1="10" y1="-6" x2="10" y2="-13"/>
+          <line x1="-16" y1="0" x2="-16" y2="-4"/><line x1="16" y1="0" x2="16" y2="-4"/>
+        </g>
+        <g transform="translate(350 160)" fill="none" stroke="currentColor" stroke-width="1.2">
+          <circle cy="-6" r="10"/>
+          <text y="-3" font-family="Oswald, sans-serif" font-weight="700" font-size="11" text-anchor="middle" fill="currentColor" stroke="none">P</text>
+          <line x1="0" y1="4" x2="0" y2="14"/><line x1="-4" y1="14" x2="4" y2="14"/>
+        </g>
+      </pattern>
+    </defs>
+    <rect width="100%" height="100%" fill="url(#iconPattern)"/>
+  </svg>
+
   <header class="site-header">
     <div class="site-header-inner">
       <a href="{{ '/' | relative_url }}" class="site-logo">
-        <span class="logo-mark">PG</span>
-        <span class="logo-text">Polaris GP</span>
+        <span class="logo-thin">POLARIS</span>
+        <span class="logo-bold">GP</span>
       </a>
-      <div class="header-right">
-        <nav class="site-nav">
-          <a href="{{ '/' | relative_url }}" {% if page.url == '/' %}class="active"{% endif %}>Home</a>
-          <a href="{{ '/finals/' | relative_url }}" {% if page.url == '/finals/' %}class="active"{% endif %}>Finals</a>
-          <a href="{{ '/week3/' | relative_url }}" {% if page.url == '/week3/' %}class="active"{% endif %}>Week 3</a>
-          <a href="{{ '/week2/' | relative_url }}" {% if page.url == '/week2/' %}class="active"{% endif %}>Week 2</a>
-          <a href="{{ '/week1/' | relative_url }}" {% if page.url == '/week1/' %}class="active"{% endif %}>Week 1</a>
-        </nav>
-        <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme">
-          <svg class="icon-sun" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
-          <svg class="icon-moon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
-        </button>
-      </div>
+      <nav class="site-nav">
+        <a href="{{ '/' | relative_url }}" {% if page.url == '/' %}class="active"{% endif %}>Home</a>
+        <a href="{{ '/event/' | relative_url }}" {% if page.url == '/event/' %}class="active"{% endif %}>The Event</a>
+        <a href="{{ '/finals/' | relative_url }}" {% if page.url == '/finals/' %}class="active"{% endif %}>Finals</a>
+        <a href="{{ '/week3/' | relative_url }}" {% if page.url == '/week3/' %}class="active"{% endif %}>Week 3</a>
+        <a href="{{ '/week2/' | relative_url }}" {% if page.url == '/week2/' %}class="active"{% endif %}>Week 2</a>
+        <a href="{{ '/week1/' | relative_url }}" {% if page.url == '/week1/' %}class="active"{% endif %}>Week 1</a>
+      </nav>
     </div>
   </header>
 
-  <div class="site-wrapper">
-    <main class="site-main">
-      {{ content }}
-    </main>
+  <main class="site-main">
+    {{ content }}
+  </main>
 
-    <footer class="site-footer">
-      Polaris GP &middot; Build fast. Race faster.
-    </footer>
-  </div>
+  <footer class="site-footer">
+    Polaris GP <span>·</span> Build fast <span>·</span> Race faster
+  </footer>
 
   <script>
-    // Theme toggle
-    (function() {
-      var btn = document.getElementById('themeToggle');
-      if (!btn) return;
-      btn.addEventListener('click', function() {
-        var html = document.documentElement;
-        var current = html.getAttribute('data-theme');
-        var next = current === 'dark' ? 'light' : 'dark';
-        html.setAttribute('data-theme', next);
-        localStorage.setItem('polaris-theme', next);
-      });
-    })();
-
-    // Copy button
-    (function() {
-      var btns = document.querySelectorAll('.copy-btn');
-      for (var i = 0; i < btns.length; i++) {
-        (function(btn) {
-          btn.addEventListener('click', function(e) {
-            e.preventDefault();
-            var block = btn.closest('.copy-block');
-            if (!block) return;
-            var content = block.querySelector('.copy-content');
-            if (!content) return;
-            var text = content.innerText || content.textContent;
-            if (navigator.clipboard && navigator.clipboard.writeText) {
-              navigator.clipboard.writeText(text).then(function() {
-                btn.textContent = 'Copied!';
-                btn.classList.add('copied');
-                setTimeout(function() {
-                  btn.textContent = 'Copy';
-                  btn.classList.remove('copied');
-                }, 2000);
-              }).catch(function() {
-                fallbackCopy(text, btn);
-              });
-            } else {
-              fallbackCopy(text, btn);
-            }
-          });
-        })(btns[i]);
-      }
-
-      function fallbackCopy(text, btn) {
-        var ta = document.createElement('textarea');
-        ta.value = text;
-        ta.style.position = 'fixed';
-        ta.style.left = '-9999px';
-        document.body.appendChild(ta);
-        ta.select();
-        try {
-          document.execCommand('copy');
-          btn.textContent = 'Copied!';
-          btn.classList.add('copied');
-          setTimeout(function() {
-            btn.textContent = 'Copy';
-            btn.classList.remove('copied');
-          }, 2000);
-        } catch(e) {
-          btn.textContent = 'Failed';
-          setTimeout(function() { btn.textContent = 'Copy'; }, 2000);
-        }
-        document.body.removeChild(ta);
-      }
-    })();
-
-    // Interactive checklist
     (function() {
       var items = document.querySelectorAll('.checklist li');
       for (var i = 0; i < items.length; i++) {

@@ -1,0 +1,935 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The Event — Polaris GP Finals</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@200;300;400;500;600;700&family=Nunito:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --red: #e11d24;
+    --red-deep: #b8161c;
+    --red-soft: rgba(225,29,36,0.12);
+    --ink: #ffffff;
+    --ink-soft: rgba(255,255,255,0.78);
+    --muted: rgba(255,255,255,0.5);
+    --paper: #0a0a0a;
+    --paper-warm: #141414;
+    --paper-card: #161616;
+    --line: rgba(255,255,255,0.1);
+    --line-strong: rgba(255,255,255,0.25);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { background: var(--paper); color: var(--ink); }
+  body {
+    font-family: 'Nunito', system-ui, sans-serif;
+    font-weight: 400;
+    font-size: 17px;
+    line-height: 1.6;
+    overflow-x: hidden;
+  }
+
+  .bg-pattern {
+    position: fixed;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 0;
+    opacity: 0.22;
+    color: #e11d24;
+  }
+  body::after {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background:
+      radial-gradient(ellipse 900px 700px at 20% 0%, rgba(225,29,36,0.14), transparent 60%),
+      radial-gradient(ellipse 700px 500px at 90% 30%, rgba(225,29,36,0.07), transparent 65%),
+      radial-gradient(ellipse 800px 600px at 50% 110%, rgba(225,29,36,0.10), transparent 60%);
+    pointer-events: none;
+    z-index: 0;
+  }
+  a { color: inherit; }
+
+  /* Header */
+  .site-header {
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    background: rgba(10, 10, 10, 0.85);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--line);
+  }
+  .site-header-inner {
+    max-width: 1180px;
+    margin: 0 auto;
+    padding: 18px 32px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .site-logo {
+    display: flex;
+    align-items: baseline;
+    gap: 6px;
+    text-decoration: none;
+    font-family: 'Oswald', sans-serif;
+    letter-spacing: 0.04em;
+  }
+  .logo-thin { font-weight: 300; font-size: 22px; color: var(--ink); }
+  .logo-bold { font-weight: 700; font-size: 24px; color: var(--red); }
+  .site-nav {
+    display: flex;
+    gap: 28px;
+    font-family: 'Nunito', sans-serif;
+    font-weight: 600;
+    font-size: 14px;
+    letter-spacing: 0.02em;
+  }
+  .site-nav a {
+    color: var(--ink);
+    text-decoration: none;
+    opacity: 0.65;
+    transition: opacity 0.18s, color 0.18s;
+    position: relative;
+    padding: 4px 0;
+  }
+  .site-nav a:hover { opacity: 1; }
+  .site-nav a.active { opacity: 1; color: var(--red); }
+  .site-nav a.active::after {
+    content: '';
+    position: absolute;
+    left: 0; right: 0; bottom: -2px;
+    height: 2px;
+    background: var(--red);
+  }
+
+  .container {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 0 32px;
+    position: relative;
+    z-index: 1;
+  }
+
+  /* Hero */
+  .hero {
+    padding: 110px 0 80px;
+    text-align: center;
+    position: relative;
+  }
+  .hero-eyebrow {
+    font-family: 'Oswald', sans-serif;
+    font-size: 13px;
+    font-weight: 500;
+    letter-spacing: 0.4em;
+    text-transform: uppercase;
+    color: var(--red);
+    margin-bottom: 20px;
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .hero-eyebrow::before, .hero-eyebrow::after {
+    content: '';
+    width: 28px;
+    height: 1px;
+    background: var(--red);
+  }
+  .hero-title {
+    font-family: 'Oswald', sans-serif;
+    font-size: clamp(56px, 11vw, 132px);
+    font-weight: 700;
+    line-height: 0.92;
+    letter-spacing: 0.005em;
+    margin-bottom: 16px;
+  }
+  .hero-title .accent { color: var(--red); }
+  .hero-subtitle {
+    font-family: 'Oswald', sans-serif;
+    font-weight: 300;
+    font-size: clamp(20px, 2.4vw, 28px);
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+    margin-bottom: 36px;
+  }
+  .hero-subtitle strong { font-weight: 600; color: var(--ink); }
+  .hero-divider {
+    width: 100%;
+    max-width: 720px;
+    height: 1px;
+    background: var(--ink);
+    margin: 30px auto 36px;
+    position: relative;
+  }
+  .hero-divider::before, .hero-divider::after {
+    content: '';
+    position: absolute;
+    top: -3px;
+    width: 7px;
+    height: 7px;
+    background: var(--red);
+    border-radius: 50%;
+  }
+  .hero-divider::before { left: 0; }
+  .hero-divider::after { right: 0; }
+  .hero-tag {
+    font-size: 21px;
+    line-height: 1.55;
+    max-width: 640px;
+    margin: 0 auto 12px;
+    color: var(--ink-soft);
+  }
+  .hero-tag strong { font-weight: 800; color: var(--ink); }
+
+  /* Section */
+  .section { padding: 90px 0; position: relative; }
+  .section-eyebrow {
+    font-family: 'Oswald', sans-serif;
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: 0.35em;
+    text-transform: uppercase;
+    color: var(--red);
+    margin-bottom: 14px;
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 14px;
+  }
+  .section-eyebrow::before, .section-eyebrow::after {
+    content: '';
+    width: 24px;
+    height: 1px;
+    background: var(--red);
+    opacity: 0.5;
+  }
+  .section-title {
+    font-family: 'Oswald', sans-serif;
+    font-weight: 700;
+    font-size: clamp(40px, 6vw, 68px);
+    text-align: center;
+    line-height: 1;
+    letter-spacing: 0.005em;
+    margin-bottom: 24px;
+  }
+  .section-title em { font-style: normal; color: var(--red); }
+  .section-lede {
+    text-align: center;
+    max-width: 660px;
+    margin: 0 auto 56px;
+    font-size: 18px;
+    line-height: 1.6;
+    color: var(--ink-soft);
+  }
+
+  /* SCHEDULE — two big session blocks */
+  .schedule-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+  }
+  .session-card {
+    border: 1px solid var(--line-strong);
+    border-radius: 24px;
+    background: var(--paper-card);
+    padding: 0;
+    overflow: hidden;
+    position: relative;
+    transition: border-color 0.22s ease, transform 0.22s ease, box-shadow 0.22s ease;
+  }
+  .session-card:hover {
+    border-color: var(--red);
+    transform: translateY(-3px);
+    box-shadow: 0 24px 50px -16px rgba(225,29,36,0.35), 0 6px 18px rgba(0,0,0,0.5);
+  }
+  .session-card-stripe { height: 6px; background: var(--red); }
+  .session-card-body { padding: 32px 32px 36px; }
+  .session-tag {
+    font-family: 'Oswald', sans-serif;
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--red);
+    margin-bottom: 12px;
+  }
+  .session-name {
+    font-family: 'Oswald', sans-serif;
+    font-weight: 700;
+    font-size: clamp(36px, 4vw, 52px);
+    line-height: 1;
+    margin-bottom: 16px;
+  }
+  .session-date {
+    font-family: 'Oswald', sans-serif;
+    font-weight: 600;
+    font-size: 22px;
+    letter-spacing: 0.02em;
+    margin-bottom: 4px;
+  }
+  .session-time {
+    font-size: 17px;
+    color: var(--ink-soft);
+    margin-bottom: 18px;
+  }
+  .session-blurb {
+    font-size: 15px;
+    line-height: 1.55;
+    color: var(--ink-soft);
+    border-left: 2px solid var(--red);
+    padding: 4px 0 4px 14px;
+    margin-bottom: 24px;
+  }
+  .session-blurb strong { color: var(--ink); font-weight: 700; }
+  .session-card.scoring {
+    border-color: rgba(225,29,36,0.55);
+  }
+  .session-flag {
+    position: absolute;
+    top: 18px;
+    right: 18px;
+    font-family: 'Oswald', sans-serif;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    background: var(--red);
+    color: white;
+    padding: 5px 10px;
+    border-radius: 4px;
+  }
+  .session-flag.muted {
+    background: transparent;
+    color: var(--muted);
+    border: 1px solid var(--line-strong);
+  }
+  .session-meta-row {
+    display: flex;
+    gap: 28px;
+    border-top: 1px solid var(--line);
+    padding-top: 20px;
+    flex-wrap: wrap;
+  }
+  .session-meta {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+  .session-meta-label {
+    font-family: 'Oswald', sans-serif;
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+  .session-meta-value {
+    font-weight: 700;
+    font-size: 15px;
+  }
+
+  /* FLOW — numbered timeline */
+  .flow {
+    border: 1px solid var(--line-strong);
+    border-radius: 28px;
+    background: var(--paper-card);
+    padding: 48px 40px;
+    position: relative;
+  }
+  .flow::before {
+    content: '';
+    position: absolute;
+    top: -1px;
+    left: 40px;
+    right: 40px;
+    height: 4px;
+    background: var(--red);
+    border-radius: 28px 28px 0 0;
+  }
+  .flow-step {
+    display: grid;
+    grid-template-columns: 80px 1fr;
+    gap: 24px;
+    padding: 22px 0;
+    border-bottom: 1px solid var(--line);
+    align-items: start;
+  }
+  .flow-step:last-child { border-bottom: none; padding-bottom: 0; }
+  .flow-step:first-child { padding-top: 0; }
+  .flow-num {
+    font-family: 'Oswald', sans-serif;
+    font-weight: 700;
+    font-size: 44px;
+    line-height: 1;
+    -webkit-text-stroke: 1px var(--red);
+    color: transparent;
+  }
+  .flow-content { padding-top: 4px; }
+  .flow-step-title {
+    font-family: 'Oswald', sans-serif;
+    font-weight: 600;
+    font-size: 22px;
+    letter-spacing: 0.02em;
+    margin-bottom: 6px;
+  }
+  .flow-step-desc {
+    color: var(--ink-soft);
+    font-size: 16px;
+    line-height: 1.55;
+  }
+
+  /* RULES — large iconified list */
+  .rules-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+  }
+  .rule {
+    border: 1px solid var(--line-strong);
+    border-radius: 18px;
+    background: var(--paper-card);
+    padding: 28px 28px 26px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    position: relative;
+  }
+  .rule-icon {
+    width: 36px;
+    height: 36px;
+    color: var(--red);
+  }
+  .rule-title {
+    font-family: 'Oswald', sans-serif;
+    font-weight: 600;
+    font-size: 20px;
+    letter-spacing: 0.02em;
+  }
+  .rule-desc {
+    color: var(--ink-soft);
+    font-size: 15px;
+    line-height: 1.55;
+  }
+  .rule-desc strong { color: var(--ink); font-weight: 700; }
+
+  /* AUDIENCE info — alternating row layout */
+  .audience-row {
+    display: grid;
+    grid-template-columns: 80px 1fr;
+    gap: 24px;
+    padding: 28px 0;
+    border-bottom: 1px solid var(--line);
+    align-items: center;
+  }
+  .audience-row:first-child { border-top: 1px solid var(--line); }
+  .audience-icon {
+    width: 48px;
+    height: 48px;
+    color: var(--red);
+  }
+  .audience-text {
+    font-size: 17px;
+    line-height: 1.55;
+    color: var(--ink-soft);
+  }
+  .audience-text strong { color: var(--ink); font-weight: 700; }
+
+  /* PILL accent */
+  .pill {
+    display: inline-block;
+    background: var(--red);
+    color: white;
+    padding: 1px 11px;
+    border-radius: 4px;
+    font-weight: 800;
+  }
+
+  /* FINAL CTA */
+  .cta {
+    padding: 100px 0 80px;
+    text-align: center;
+    position: relative;
+  }
+  .cta-title {
+    font-family: 'Oswald', sans-serif;
+    font-weight: 700;
+    font-size: clamp(48px, 7vw, 96px);
+    line-height: 1;
+    letter-spacing: 0.005em;
+    margin-bottom: 24px;
+  }
+  .cta-title .accent { color: var(--red); }
+  .cta-sub {
+    font-size: 20px;
+    color: var(--ink-soft);
+    max-width: 540px;
+    margin: 0 auto 36px;
+  }
+  .cta-meta {
+    display: flex;
+    justify-content: center;
+    gap: 48px;
+    flex-wrap: wrap;
+    margin-top: 32px;
+  }
+  .cta-meta-item {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+  .cta-meta-label {
+    font-family: 'Oswald', sans-serif;
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--red);
+  }
+  .cta-meta-value {
+    font-family: 'Oswald', sans-serif;
+    font-weight: 600;
+    font-size: 22px;
+    letter-spacing: 0.02em;
+  }
+
+  /* Footer */
+  .site-footer {
+    border-top: 1px solid var(--line);
+    padding: 48px 32px;
+    text-align: center;
+    font-family: 'Oswald', sans-serif;
+    font-size: 13px;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-top: 60px;
+  }
+  .site-footer span { color: var(--red); margin: 0 8px; }
+
+  @media (max-width: 720px) {
+    .schedule-grid { grid-template-columns: 1fr; }
+    .rules-grid { grid-template-columns: 1fr; }
+    .flow { padding: 36px 24px; }
+    .flow-step { grid-template-columns: 60px 1fr; gap: 16px; }
+    .flow-num { font-size: 32px; }
+    .audience-row { grid-template-columns: 56px 1fr; gap: 16px; }
+    .audience-icon { width: 36px; height: 36px; }
+    .site-nav { display: none; }
+    .hero { padding: 70px 0 60px; }
+    .section { padding: 70px 0; }
+    .cta { padding: 70px 0 60px; }
+  }
+</style>
+</head>
+<body>
+
+<svg class="bg-pattern" aria-hidden="true" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <pattern id="iconPattern" patternUnits="userSpaceOnUse" width="400" height="240">
+      <!-- COL 1 -->
+      <g transform="translate(50 40)" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linejoin="round" stroke-linecap="round">
+        <path d="M -20 4 Q -16 -3, -4 -3 L 3 -9 L 13 -9 Q 17 -7, 19 -2 L 19 4 Z"/>
+        <line x1="19" y1="-2" x2="22" y2="-8"/><line x1="18" y1="-8" x2="25" y2="-8"/>
+        <line x1="-22" y1="4" x2="-18" y2="4"/><line x1="-24" y1="2" x2="-18" y2="2"/>
+        <circle cx="-13" cy="5" r="4"/><circle cx="13" cy="5" r="4"/>
+      </g>
+      <g transform="translate(50 120)" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linejoin="round">
+        <path d="M -13 6 Q -13 -13, 4 -13 Q 13 -13, 13 -3 L 13 4 Q 13 6, 11 6 Z"/>
+        <line x1="-9" y1="-3" x2="11" y2="-3" stroke-width="3"/>
+        <line x1="-13" y1="2" x2="13" y2="2"/>
+      </g>
+      <g transform="translate(50 200)" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round">
+        <circle r="13"/>
+        <line x1="0" y1="-13" x2="0" y2="-17"/><line x1="-3" y1="-17" x2="3" y2="-17"/>
+        <line x1="-9" y1="-9" x2="-11" y2="-11"/><line x1="9" y1="-9" x2="11" y2="-11"/>
+        <line x1="0" y1="0" x2="0" y2="-7"/><line x1="0" y1="0" x2="6" y2="3"/>
+      </g>
+      <!-- COL 2 (seam + offset) -->
+      <g transform="translate(150 0) rotate(-8)" fill="none" stroke="currentColor" stroke-width="1.2">
+        <line x1="-11" y1="-13" x2="-11" y2="16"/>
+        <rect x="-11" y="-13" width="22" height="13"/>
+        <g fill="currentColor" stroke="none">
+          <rect x="-11" y="-13" width="5.5" height="3.25"/><rect x="0" y="-13" width="5.5" height="3.25"/>
+          <rect x="-5.5" y="-9.75" width="5.5" height="3.25"/>
+          <rect x="-11" y="-6.5" width="5.5" height="3.25"/><rect x="0" y="-6.5" width="5.5" height="3.25"/>
+          <rect x="-5.5" y="-3.25" width="5.5" height="3.25"/>
+        </g>
+      </g>
+      <g transform="translate(150 240) rotate(-8)" fill="none" stroke="currentColor" stroke-width="1.2">
+        <line x1="-11" y1="-13" x2="-11" y2="16"/>
+        <rect x="-11" y="-13" width="22" height="13"/>
+        <g fill="currentColor" stroke="none">
+          <rect x="-11" y="-13" width="5.5" height="3.25"/><rect x="0" y="-13" width="5.5" height="3.25"/>
+          <rect x="-5.5" y="-9.75" width="5.5" height="3.25"/>
+          <rect x="-11" y="-6.5" width="5.5" height="3.25"/><rect x="0" y="-6.5" width="5.5" height="3.25"/>
+          <rect x="-5.5" y="-3.25" width="5.5" height="3.25"/>
+        </g>
+      </g>
+      <g transform="translate(150 80)" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linejoin="round">
+        <path d="M -14 -6 Q -14 -10, -10 -10 L 10 -10 Q 14 -10, 14 -6 L 14 6 Q 14 10, 10 10 L -10 10 Q -14 10, -14 6 Z"/>
+        <rect x="-7" y="-5" width="14" height="6" fill="currentColor" stroke="none"/>
+        <circle cy="6" r="1.6" fill="currentColor" stroke="none"/>
+        <line x1="-12" y1="-2" x2="-9" y2="-2"/><line x1="9" y1="-2" x2="12" y2="-2"/>
+      </g>
+      <g transform="translate(150 160)" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linejoin="round">
+        <rect x="-5" y="-12" width="10" height="20"/>
+        <rect x="-15" y="-4" width="10" height="12"/>
+        <rect x="5" y="0" width="10" height="8"/>
+        <text x="0" y="0" font-family="Oswald, sans-serif" font-weight="700" font-size="9" text-anchor="middle" fill="currentColor" stroke="none">1</text>
+        <text x="-10" y="6" font-family="Oswald, sans-serif" font-weight="700" font-size="8" text-anchor="middle" fill="currentColor" stroke="none">2</text>
+        <text x="10" y="7" font-family="Oswald, sans-serif" font-weight="700" font-size="7" text-anchor="middle" fill="currentColor" stroke="none">3</text>
+      </g>
+      <!-- COL 3 -->
+      <g transform="translate(250 40)" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linejoin="round">
+        <path d="M -7 -13 L 7 -13 L 7 -5 Q 7 4, 0 4 Q -7 4, -7 -5 Z"/>
+        <path d="M -7 -10 Q -12 -10, -12 -5 Q -12 -1, -8 0"/>
+        <path d="M 7 -10 Q 12 -10, 12 -5 Q 12 -1, 8 0"/>
+        <line x1="0" y1="4" x2="0" y2="9"/>
+        <line x1="-5" y1="13" x2="5" y2="13"/><line x1="-3" y1="9" x2="3" y2="9"/>
+      </g>
+      <g transform="translate(250 120) rotate(15)" fill="none" stroke="currentColor" stroke-width="1.2">
+        <circle r="14"/><circle r="9"/><circle r="3" fill="currentColor" stroke="none"/>
+        <line x1="0" y1="-9" x2="0" y2="-3"/>
+        <line x1="8.6" y1="-2.8" x2="2.85" y2="-0.93"/>
+        <line x1="5.3" y1="7.3" x2="1.76" y2="2.43"/>
+        <line x1="-5.3" y1="7.3" x2="-1.76" y2="2.43"/>
+        <line x1="-8.6" y1="-2.8" x2="-2.85" y2="-0.93"/>
+      </g>
+      <g transform="translate(250 200)" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linejoin="round">
+        <rect x="-13" y="-9" width="26" height="14" rx="1.5"/>
+        <text x="0" y="2" font-family="Oswald, sans-serif" font-weight="700" font-size="9" text-anchor="middle" fill="currentColor" stroke="none">DRS</text>
+        <line x1="0" y1="5" x2="0" y2="13"/><line x1="-4" y1="13" x2="4" y2="13"/>
+      </g>
+      <!-- COL 4 (seam + offset) -->
+      <g transform="translate(350 0)" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M -14 -10 Q -14 -2, -6 -2 L 6 -2 Q 14 -2, 14 6 L 14 12"/>
+        <line x1="-14" y1="-13" x2="-14" y2="-7" stroke-width="2.5"/>
+        <line x1="-16" y1="-13" x2="-12" y2="-13" stroke-width="2.5"/>
+        <circle cx="14" cy="13" r="1.8" fill="currentColor" stroke="none"/>
+      </g>
+      <g transform="translate(350 240)" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M -14 -10 Q -14 -2, -6 -2 L 6 -2 Q 14 -2, 14 6 L 14 12"/>
+        <line x1="-14" y1="-13" x2="-14" y2="-7" stroke-width="2.5"/>
+        <line x1="-16" y1="-13" x2="-12" y2="-13" stroke-width="2.5"/>
+        <circle cx="14" cy="13" r="1.8" fill="currentColor" stroke="none"/>
+      </g>
+      <g transform="translate(350 80)" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linejoin="round">
+        <path d="M -16 0 L -10 -6 L 10 -6 L 16 0 L 16 4 L -16 4 Z"/>
+        <line x1="-10" y1="-6" x2="-10" y2="-13"/><line x1="-3" y1="-6" x2="-3" y2="-13"/>
+        <line x1="3" y1="-6" x2="3" y2="-13"/><line x1="10" y1="-6" x2="10" y2="-13"/>
+        <line x1="-16" y1="0" x2="-16" y2="-4"/><line x1="16" y1="0" x2="16" y2="-4"/>
+      </g>
+      <g transform="translate(350 160)" fill="none" stroke="currentColor" stroke-width="1.2">
+        <circle cy="-6" r="10"/>
+        <text y="-3" font-family="Oswald, sans-serif" font-weight="700" font-size="11" text-anchor="middle" fill="currentColor" stroke="none">P</text>
+        <line x1="0" y1="4" x2="0" y2="14"/><line x1="-4" y1="14" x2="4" y2="14"/>
+      </g>
+    </pattern>
+  </defs>
+  <rect width="100%" height="100%" fill="url(#iconPattern)"/>
+</svg>
+
+<header class="site-header">
+  <div class="site-header-inner">
+    <a href="mockup.html" class="site-logo">
+      <span class="logo-thin">POLARIS</span>
+      <span class="logo-bold">GP</span>
+    </a>
+    <nav class="site-nav">
+      <a href="mockup.html">Home</a>
+      <a href="event-mockup.html" class="active">The Event</a>
+      <a href="#">Finals</a>
+      <a href="#">Week 3</a>
+      <a href="#">Week 2</a>
+      <a href="#">Week 1</a>
+    </nav>
+  </div>
+</header>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="container">
+    <span class="hero-eyebrow">Public Announcement</span>
+    <h1 class="hero-title">The <span class="accent">Finals</span></h1>
+    <div class="hero-subtitle">May 11 <strong>·</strong> May 13 <strong>·</strong> 2026</div>
+    <div class="hero-divider"></div>
+    <p class="hero-tag">Six teams. Six weeks of building. Two sessions to settle it.</p>
+    <p class="hero-tag"><strong>The campus is invited. The cars are ready. Come watch.</strong></p>
+  </div>
+</section>
+
+<!-- SCHEDULE -->
+<section class="section">
+  <div class="container">
+    <div class="section-eyebrow">The Schedule</div>
+    <h2 class="section-title">Two <em>Sessions</em>. Two Chances.</h2>
+    <p class="section-lede">Each team takes the track twice. Both runs are public. <strong>Only Wednesday's Final scores</strong> — Monday's Semi Finals is the full format dress rehearsal in front of a live crowd.</p>
+
+    <div class="schedule-grid">
+      <div class="session-card">
+        <div class="session-card-stripe"></div>
+        <span class="session-flag muted">Dress Rehearsal</span>
+        <div class="session-card-body">
+          <div class="session-tag">Session 01 · Semi Finals</div>
+          <div class="session-name">Monday<br>Night</div>
+          <div class="session-date">May 11, 2026</div>
+          <div class="session-time">6:00 PM – 7:00 PM</div>
+          <p class="session-blurb">Full format. Full audience. Same pressure. <strong>The time set here does not score</strong> — but it's the only chance to run the Final's setup before the Final itself.</p>
+          <div class="session-meta-row">
+            <div class="session-meta">
+              <span class="session-meta-label">Location</span>
+              <span class="session-meta-value">2nd Floor Track</span>
+            </div>
+            <div class="session-meta">
+              <span class="session-meta-label">Audience</span>
+              <span class="session-meta-value">Public</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="session-card scoring">
+        <div class="session-card-stripe"></div>
+        <span class="session-flag">Scored</span>
+        <div class="session-card-body">
+          <div class="session-tag">Session 02 · The Final</div>
+          <div class="session-name">Wednesday<br>Night</div>
+          <div class="session-date">May 13, 2026</div>
+          <div class="session-time">6:00 PM – 7:00 PM</div>
+          <p class="session-blurb"><strong>The only scored session.</strong> Wednesday's average lap time decides the winner. One hour. One chance that counts.</p>
+          <div class="session-meta-row">
+            <div class="session-meta">
+              <span class="session-meta-label">Location</span>
+              <span class="session-meta-value">2nd Floor Track</span>
+            </div>
+            <div class="session-meta">
+              <span class="session-meta-label">Audience</span>
+              <span class="session-meta-value">Public + Guests</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FLOW OF THE EVENT -->
+<section class="section">
+  <div class="container">
+    <div class="section-eyebrow">Flow of the Event</div>
+    <h2 class="section-title">How the <em>Hour</em> Unfolds</h2>
+    <p class="section-lede">Each session runs to a tight rhythm. Six teams, the clock, and a track full of crash potential. Here is what to expect.</p>
+
+    <div class="flow">
+      <div class="flow-step">
+        <div class="flow-num">01</div>
+        <div class="flow-content">
+          <div class="flow-step-title">Doors Open · 5:45 PM</div>
+          <div class="flow-step-desc">Audience seating along the marked perimeter. Teams roll in their cars, complete their final tech checks, and warm up batteries. The track is open for inspection.</div>
+        </div>
+      </div>
+
+      <div class="flow-step">
+        <div class="flow-num">02</div>
+        <div class="flow-content">
+          <div class="flow-step-title">Race Briefing · 5:55 PM</div>
+          <div class="flow-step-desc">Organisers walk through the format, track limits, and call order. Teams confirm their drivers, spotters, and pit crews. The clock is set.</div>
+        </div>
+      </div>
+
+      <div class="flow-step">
+        <div class="flow-num">03</div>
+        <div class="flow-content">
+          <div class="flow-step-title">Runs Begin · 6:00 PM</div>
+          <div class="flow-step-desc">Teams take the track in rotation. Each car must complete <span class="pill">5 consecutive timed laps</span> without stopping. Lap times are called live as the car crosses the line.</div>
+        </div>
+      </div>
+
+      <div class="flow-step">
+        <div class="flow-num">04</div>
+        <div class="flow-content">
+          <div class="flow-step-title">Multiple Attempts</div>
+          <div class="flow-step-desc">If time permits, teams may run again to improve their best 5-lap session. The fastest <strong>complete</strong> 5-lap run is the one that scores.</div>
+        </div>
+      </div>
+
+      <div class="flow-step">
+        <div class="flow-num">05</div>
+        <div class="flow-content">
+          <div class="flow-step-title">Session Ends · 7:00 PM</div>
+          <div class="flow-step-desc">Sharp. Whatever has been timed by 7:00 PM stands as the result. Standings go up on the board immediately after.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- RULES & REGULATIONS -->
+<section class="section">
+  <div class="container">
+    <div class="section-eyebrow">Rules &amp; Regulations</div>
+    <h2 class="section-title">How <em>Scoring</em> Works</h2>
+    <p class="section-lede">Clean, simple, public. Every team races against the same rubric. The track is the truth.</p>
+
+    <div class="rules-grid">
+      <div class="rule">
+        <svg class="rule-icon" viewBox="0 0 36 36" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="18" cy="18" r="14"/>
+          <path d="M 18 8 L 18 18 L 26 22"/>
+        </svg>
+        <div class="rule-title">Out Lap + 5 Timed Laps</div>
+        <div class="rule-desc">Each session is one <strong>Out Lap followed by 5 Timed Laps</strong>, run in unbroken succession. The Out Lap doesn't score — it's there to settle the car. The five that follow are the ones being clocked.</div>
+      </div>
+
+      <div class="rule">
+        <svg class="rule-icon" viewBox="0 0 36 36" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M 4 30 L 12 22 L 18 26 L 32 8"/>
+          <path d="M 24 8 L 32 8 L 32 16"/>
+        </svg>
+        <div class="rule-title">Best Average Lap Time Wins</div>
+        <div class="rule-desc">Each lap is individually timed. The team's score is the <strong>average across the five laps</strong>. Lowest average wins. Consistency beats raw speed.</div>
+      </div>
+
+      <div class="rule">
+        <svg class="rule-icon" viewBox="0 0 36 36" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="9" y1="10" x2="9" y2="26"/>
+          <line x1="15" y1="10" x2="15" y2="26"/>
+          <line x1="21" y1="10" x2="21" y2="26"/>
+          <line x1="27" y1="10" x2="27" y2="26"/>
+          <line x1="6" y1="13" x2="30" y2="23"/>
+        </svg>
+        <div class="rule-title">Up to 5 Faults Per Session</div>
+        <div class="rule-desc">A fault counts toward your budget across the <strong>full session</strong> (Out Lap + 5 Timed Laps). Two kinds of fault count:
+          <br><br>
+          <strong>1. Track Limit Violation</strong> — all four tyres leave the track surface.
+          <br>
+          <strong>2. Track Reset</strong> — the car becomes undrivable (stuck, flipped, jammed) and needs a hands-on reset to track position. Counts even if the car never left the track.
+          <br><br>
+          A <strong>6th fault ends the session</strong>.
+        </div>
+      </div>
+
+      <div class="rule">
+        <svg class="rule-icon" viewBox="0 0 36 36" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="2" y1="30" x2="34" y2="30"/>
+          <path d="M 6 30 L 16 30 L 16 14 Z" fill="currentColor" fill-opacity="0.18"/>
+          <path d="M 16 14 Q 26 4, 32 22" stroke-dasharray="2.5 2.5"/>
+          <circle cx="32" cy="22" r="1.5" fill="currentColor"/>
+        </svg>
+        <div class="rule-title">The Ramp Jump</div>
+        <div class="rule-desc">If the car <strong>fails to land within the track</strong> after the ramp, you must <strong>restart before the ramp</strong> and re-attempt the jump. The session timer keeps running. The failed jump itself counts as a fault.</div>
+      </div>
+
+      <div class="rule">
+        <svg class="rule-icon" viewBox="0 0 36 36" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="6" y="10" width="24" height="16" rx="2"/>
+          <line x1="6" y1="16" x2="30" y2="16"/>
+          <circle cx="12" cy="20" r="1.5" fill="currentColor"/>
+          <circle cx="18" cy="20" r="1.5" fill="currentColor"/>
+          <circle cx="24" cy="20" r="1.5" fill="currentColor"/>
+        </svg>
+        <div class="rule-title">Multiple Attempts Allowed</div>
+        <div class="rule-desc">Within the 1-hour window, teams may run more than once. Only the <strong>best complete 5-lap session</strong> counts toward standings.</div>
+      </div>
+
+      <div class="rule">
+        <svg class="rule-icon" viewBox="0 0 36 36" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M 12 18 L 16 22 L 26 12"/>
+          <circle cx="18" cy="18" r="14"/>
+          <line x1="18" y1="4" x2="18" y2="2"/>
+          <line x1="18" y1="34" x2="18" y2="32"/>
+        </svg>
+        <div class="rule-title">Only the Final Counts</div>
+        <div class="rule-desc">Wednesday's <strong>Final</strong> is the only scored session. Monday's Semi Finals run the same format under the same rules — same audience, same pressure — but the time set there does not determine the winner. <strong>The Final decides it.</strong></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- AUDIENCE -->
+<section class="section">
+  <div class="container">
+    <div class="section-eyebrow">For the Audience</div>
+    <h2 class="section-title">If You're <em>Coming</em> to Watch</h2>
+    <p class="section-lede">A few quick notes so you get the most out of being there.</p>
+
+    <div style="margin-top: 32px;">
+      <div class="audience-row">
+        <svg class="audience-icon" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="24" cy="24" r="20"/>
+          <path d="M 24 14 L 24 24 L 32 28"/>
+        </svg>
+        <div class="audience-text"><strong>Arrive by 5:55 PM.</strong> Doors open at 5:45. Runs start sharp at 6:00. Late arrivals get whatever space is left.</div>
+      </div>
+
+      <div class="audience-row">
+        <svg class="audience-icon" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M 8 36 L 24 12 L 40 36 Z"/>
+          <line x1="14" y1="36" x2="34" y2="36"/>
+        </svg>
+        <div class="audience-text"><strong>Stay behind the cones.</strong> The track perimeter is marked. The cars are fast and unpredictable — keep yourself and your bag clear of the racing surface.</div>
+      </div>
+
+      <div class="audience-row">
+        <svg class="audience-icon" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="8" y="14" width="32" height="22" rx="2"/>
+          <circle cx="24" cy="25" r="6"/>
+          <rect x="20" y="10" width="8" height="4"/>
+        </svg>
+        <div class="audience-text"><strong>Photos and videos welcome.</strong> No flash — it can throw off drivers and spotters. Tag <span class="pill">@polarisgp</span> if you post.</div>
+      </div>
+
+      <div class="audience-row">
+        <svg class="audience-icon" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M 24 8 L 28 18 L 38 18 L 30 26 L 32 36 L 24 30 L 16 36 L 18 26 L 10 18 L 20 18 Z"/>
+        </svg>
+        <div class="audience-text"><strong>Cheer loud.</strong> Cheer your friends, your team, the underdogs. The drivers are listening. So is the room.</div>
+      </div>
+
+      <div class="audience-row">
+        <svg class="audience-icon" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="24" cy="24" r="20"/>
+          <line x1="14" y1="20" x2="34" y2="20"/>
+          <line x1="14" y1="28" x2="34" y2="28"/>
+        </svg>
+        <div class="audience-text"><strong>External guests in attendance.</strong> Industry visitors and faculty will be watching the Final on Wednesday. Dress is casual; the racing is not.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta">
+  <div class="container">
+    <h2 class="cta-title">Then, <span class="accent">come watch.</span></h2>
+    <p class="cta-sub">Six teams. Five laps. One winner. Nobody coasts to it.</p>
+
+    <div class="cta-meta">
+      <div class="cta-meta-item">
+        <span class="cta-meta-label">Semi Finals</span>
+        <span class="cta-meta-value">Mon · 6 PM</span>
+      </div>
+      <div class="cta-meta-item">
+        <span class="cta-meta-label">Final</span>
+        <span class="cta-meta-value">Wed · 6 PM</span>
+      </div>
+      <div class="cta-meta-item">
+        <span class="cta-meta-label">Where</span>
+        <span class="cta-meta-value">2nd Floor</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer class="site-footer">
+  Polaris GP <span>·</span> Build fast <span>·</span> Race faster
+</footer>
+
+</body>
+</html>
