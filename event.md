@@ -30,7 +30,7 @@ description: "Public announcement for the Polaris GP Finals — schedule, format
           <div class="session-tag">Session 01 · Semi Finals</div>
           <div class="session-name">Monday<br>Night</div>
           <div class="session-date">May 11, 2026</div>
-          <div class="session-time">6:00 PM – 7:00 PM</div>
+          <div class="session-time">4:00 PM – 6:00 PM</div>
           <p class="session-blurb">Full format. Full audience. Same pressure. <strong>The time set here does not score</strong> — but it's the only chance to run the Final's setup before the Final itself.</p>
           <div class="session-meta-row">
             <div class="session-meta">
@@ -52,7 +52,7 @@ description: "Public announcement for the Polaris GP Finals — schedule, format
           <div class="session-tag">Session 02 · The Final</div>
           <div class="session-name">Wednesday<br>Night</div>
           <div class="session-date">May 13, 2026</div>
-          <div class="session-time">6:00 PM – 7:00 PM</div>
+          <div class="session-time">4:00 PM – 6:00 PM</div>
           <p class="session-blurb"><strong>The only scored session.</strong> Wednesday's average lap time decides the winner. One hour. One chance that counts.</p>
           <div class="session-meta-row">
             <div class="session-meta">
@@ -80,7 +80,7 @@ description: "Public announcement for the Polaris GP Finals — schedule, format
       <div class="flow-step">
         <div class="flow-num">01</div>
         <div class="flow-content">
-          <div class="flow-step-title">Doors Open · 5:45 PM</div>
+          <div class="flow-step-title">Doors Open · 3:45 PM</div>
           <div class="flow-step-desc">Audience seating along the marked perimeter. Teams roll in their cars, complete their final tech checks, and warm up batteries. The track is open for inspection.</div>
         </div>
       </div>
@@ -88,7 +88,7 @@ description: "Public announcement for the Polaris GP Finals — schedule, format
       <div class="flow-step">
         <div class="flow-num">02</div>
         <div class="flow-content">
-          <div class="flow-step-title">Race Briefing · 5:55 PM</div>
+          <div class="flow-step-title">Race Briefing · 3:55 PM</div>
           <div class="flow-step-desc">Organisers walk through the format, track limits, and call order. Teams confirm their drivers, spotters, and pit crews. The clock is set.</div>
         </div>
       </div>
@@ -96,7 +96,7 @@ description: "Public announcement for the Polaris GP Finals — schedule, format
       <div class="flow-step">
         <div class="flow-num">03</div>
         <div class="flow-content">
-          <div class="flow-step-title">Runs Begin · 6:00 PM</div>
+          <div class="flow-step-title">Runs Begin · 4:00 PM</div>
           <div class="flow-step-desc">Teams take the track in rotation. Each car must complete <span class="pill">5 consecutive timed laps</span> without stopping. Lap times are called live as the car crosses the line.</div>
         </div>
       </div>
@@ -112,8 +112,8 @@ description: "Public announcement for the Polaris GP Finals — schedule, format
       <div class="flow-step">
         <div class="flow-num">05</div>
         <div class="flow-content">
-          <div class="flow-step-title">Session Ends · 7:00 PM</div>
-          <div class="flow-step-desc">Sharp. Whatever has been timed by 7:00 PM stands as the result. Standings go up on the board immediately after.</div>
+          <div class="flow-step-title">Session Ends · 6:00 PM</div>
+          <div class="flow-step-desc">Sharp. Whatever has been timed by 6:00 PM stands as the result. Standings go up on the board immediately after.</div>
         </div>
       </div>
     </div>
@@ -213,7 +213,7 @@ description: "Public announcement for the Polaris GP Finals — schedule, format
           <circle cx="24" cy="24" r="20"/>
           <path d="M 24 14 L 24 24 L 32 28"/>
         </svg>
-        <div class="audience-text"><strong>Arrive by 5:55 PM.</strong> Doors open at 5:45. Runs start sharp at 6:00. Late arrivals get whatever space is left.</div>
+        <div class="audience-text"><strong>Arrive by 3:55 PM.</strong> Doors open at 3:45. Runs start sharp at 4:00. Late arrivals get whatever space is left.</div>
       </div>
 
       <div class="audience-row">
@@ -260,11 +260,11 @@ description: "Public announcement for the Polaris GP Finals — schedule, format
     <div class="cta-meta">
       <div class="cta-meta-item">
         <span class="cta-meta-label">Semi Finals</span>
-        <span class="cta-meta-value">Mon · 6 PM</span>
+        <span class="cta-meta-value">Mon · 4 PM</span>
       </div>
       <div class="cta-meta-item">
         <span class="cta-meta-label">Final</span>
-        <span class="cta-meta-value">Wed · 6 PM</span>
+        <span class="cta-meta-value">Wed · 4 PM</span>
       </div>
       <div class="cta-meta-item">
         <span class="cta-meta-label">Where</span>

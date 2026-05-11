@@ -50,11 +50,11 @@ title: Home
         <div class="feature-card-meta">
           <div class="feature-card-meta-item">
             <span class="feature-card-meta-label">Semi Finals</span>
-            <span class="feature-card-meta-value">Mon · 6–7 PM</span>
+            <span class="feature-card-meta-value">Mon · 4–6 PM</span>
           </div>
           <div class="feature-card-meta-item">
             <span class="feature-card-meta-label">Final</span>
-            <span class="feature-card-meta-value">Wed · 6–7 PM</span>
+            <span class="feature-card-meta-value">Wed · 4–6 PM</span>
           </div>
           <div class="feature-card-meta-item">
             <span class="feature-card-meta-label">Format</span>

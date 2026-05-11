@@ -21,11 +21,11 @@ permalink: /finals/
   </div>
   <div class="info-item">
     <div class="info-label">Semi Finals</div>
-    <div class="info-value">Monday, 6–7 PM</div>
+    <div class="info-value">Monday, 4–6 PM</div>
   </div>
   <div class="info-item">
     <div class="info-label">Final</div>
-    <div class="info-value">Wednesday, 6–7 PM</div>
+    <div class="info-value">Wednesday, 4–6 PM</div>
   </div>
 </div>
 
@@ -55,11 +55,11 @@ If you have been coasting, the room is about to find out.
 <div class="card-grid">
   <div class="card-sm">
     <h4>Semi Finals</h4>
-    <p><strong>Monday, 6 PM – 7 PM</strong><br>2nd Floor Track. Campus and external guests in attendance. Set your benchmark.</p>
+    <p><strong>Monday, 4 PM – 6 PM</strong><br>2nd Floor Track. Campus and external guests in attendance. Set your benchmark.</p>
   </div>
   <div class="card-sm">
     <h4>Final</h4>
-    <p><strong>Wednesday, 6 PM – 7 PM</strong><br>2nd Floor Track. The last run. No more chances after this.</p>
+    <p><strong>Wednesday, 4 PM – 6 PM</strong><br>2nd Floor Track. The last run. No more chances after this.</p>
   </div>
 </div>
 
@@ -158,7 +158,7 @@ The 2nd floor track remains open at all times. There is no excuse for showing up
   <li><span class="check-box"></span> Tools packed (screwdrivers, hex keys, soldering iron if possible)</li>
   <li><span class="check-box"></span> Team roles assigned (driver, spotter, marshal, timer)</li>
   <li><span class="check-box"></span> Practiced <strong>5 consecutive laps</strong> at race pace within track limits</li>
-  <li class="final"><span class="check-box"></span> <strong>Show up Monday at 6 PM ready to run</strong></li>
+  <li class="final"><span class="check-box"></span> <strong>Show up Monday at 4 PM ready to run</strong></li>
 </ul>
 
 ---
@@ -166,7 +166,7 @@ The 2nd floor track remains open at all times. There is no excuse for showing up
 ## Session Rules
 
 <ol class="rules">
-  <li>Both sessions run from <strong>6:00 PM to 7:00 PM</strong> sharp on the 2nd Floor.</li>
+  <li>Both sessions run from <strong>4:00 PM to 6:00 PM</strong> sharp on the 2nd Floor.</li>
   <li>Teams rotate through attempts. Multiple runs allowed within the hour.</li>
   <li>The car must complete <strong>5 laps in succession</strong> without stopping or being touched. (Up from 3.)</li>
   <li>Each lap is <strong>individually timed</strong>. Best 5-lap session is recorded.</li>
