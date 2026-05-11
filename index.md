@@ -33,6 +33,41 @@ title: Home
 
 <section class="section">
   <div class="container">
+    <div class="section-eyebrow">Live Standings</div>
+    <h2 class="section-title">After <em>Semi Finals</em></h2>
+    <p class="section-lede">Monday's dress rehearsal is done. <strong>Mavericks</strong> set the pace at <strong>0:43:182</strong>. <strong>Skibidi</strong> followed at <strong>0:46:943</strong>. Four teams DNF'd. Wednesday resets the board.</p>
+
+    <a href="{{ '/leaderboard/' | relative_url }}" class="feature-card">
+      <div class="feature-card-stripe"></div>
+      <span class="feature-card-arrow">→</span>
+      <div class="feature-card-head">
+        <span class="feature-card-eyebrow">Semi Finals · May 11, 2026</span>
+        <span class="feature-card-status">Live</span>
+      </div>
+      <div class="feature-card-body">
+        <div class="feature-card-title">View Full Leaderboard</div>
+        <p class="feature-card-desc">Six teams. Two finishers. Four DNFs. <span class="pill">The gap is public.</span> Times do not carry into the Final — Wednesday is the only run that scores.</p>
+        <div class="feature-card-meta">
+          <div class="feature-card-meta-item">
+            <span class="feature-card-meta-label">P1</span>
+            <span class="feature-card-meta-value">Mavericks</span>
+          </div>
+          <div class="feature-card-meta-item">
+            <span class="feature-card-meta-label">P2</span>
+            <span class="feature-card-meta-value">Skibidi</span>
+          </div>
+          <div class="feature-card-meta-item">
+            <span class="feature-card-meta-label">DNF</span>
+            <span class="feature-card-meta-value">4 Teams</span>
+          </div>
+        </div>
+      </div>
+    </a>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container">
     <div class="section-eyebrow">Current Week</div>
     <h2 class="section-title"><em>Finals</em></h2>
     <p class="section-lede">Two sessions. Two chances. After Wednesday, it's over. The entire campus will be in the room.</p>
