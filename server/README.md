@@ -75,6 +75,36 @@ Six message types: `session_state`, `lap_completed`, `attempt_started`,
 Team IDs the page expects: `mavericks`, `skibidi`, `orion`, `apex5`,
 `theonepieceisreal`, `forceblr`.
 
+### `session.kind` — official vs test
+
+Every `session_state` message must carry a `kind` on the `session`
+object. It controls how the public page treats the run:
+
+| Value        | Page behaviour                                       |
+|--------------|------------------------------------------------------|
+| `"official"` | Red "LIVE · OFFICIAL" badge. Results count.          |
+| `"test"`     | Yellow "TEST SESSION" banner. Results do NOT count.  |
+| _(absent)_   | Treated as `"test"` for safety.                      |
+
+```json
+{
+  "type": "session_state",
+  "session": {
+    "name": "Final",
+    "kind": "official",
+    "startedAt": 1715600000000,
+    "durationMs": 7200000,
+    "state": "running",
+    "bestLapMs": null,
+    "bestLapTeam": null
+  },
+  "teams": [...]
+}
+```
+
+The kind is decided by the operator when starting a session and is
+immutable for that session's lifetime.
+
 ## Endpoints
 
 | Method | Path        | Purpose                                       |

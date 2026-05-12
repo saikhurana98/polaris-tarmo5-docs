@@ -6,17 +6,18 @@
 
      standings — no active session. Shows the most recent canonical
                  standings (CANONICAL_STANDINGS below). The default
-                 state any time we are outside the scheduled session
-                 window AND no telemetry is flowing.
+                 state any time no telemetry has flowed for the past
+                 STALE_TELEMETRY_MS.
 
-     live      — telemetry IS flowing AND the current time is inside
-                 the scheduled session window. This is the official
-                 Final; results from here update the leaderboard.
+     live      — telemetry IS flowing AND the most recent
+                 session_state carried { session.kind: "official" }.
+                 This is treated as the official scheduled run;
+                 results update the leaderboard.
 
-     test      — telemetry IS flowing but the current time is OUTSIDE
-                 the scheduled window. Treated as a practice / sanity
-                 check. Times are clearly badged "unofficial" and do
-                 NOT update the canonical standings.
+     test      — telemetry IS flowing but session.kind is "test"
+                 (or absent — we default to test for safety). Times
+                 are clearly badged "unofficial" and do NOT update
+                 the canonical standings.
 
    To update for a future event:
      1. Edit SCHEDULED_SESSION below (the one upcoming official run).
@@ -87,6 +88,7 @@
     lastTelemetryAt: null,
     session: {
       name: SCHEDULED_SESSION.name,
+      kind: 'test',             // 'official' | 'test' — set by sender via session_state
       startedAt: null,
       durationMs: SESSION_DURATION_MS,
       bestLapMs: null,
@@ -182,24 +184,23 @@
 
   // ---------- Mode logic ----------
 
-  function isInScheduledWindow(at) {
-    const t = at != null ? at : Date.now();
-    return t >= SCHEDULED_SESSION.start.getTime() && t <= SCHEDULED_SESSION.end.getTime();
-  }
-
   function enterStandingsMode() {
     state.mode = 'standings';
     state.firstTelemetryAt = null;
     state.session.startedAt = null;
     state.session.bestLapMs = null;
     state.session.bestLapTeam = null;
+    state.session.kind = 'test';
     seedCanonical();
     render();
     logEvent('MODE', 'Idle · showing current standings', 'evt-info');
   }
 
-  function enterLiveMode() {
-    state.mode = isInScheduledWindow() ? 'live' : 'test';
+  function transitionFromIdle() {
+    // First telemetry has arrived (or arrived again after a session_ended).
+    // Initial mode is derived from whatever kind the session is currently
+    // marked as — defaults to 'test' until session_state says otherwise.
+    state.mode = state.session.kind === 'official' ? 'live' : 'test';
     state.firstTelemetryAt = Date.now();
     state.session.startedAt = Date.now();
     state.teams.forEach(t => {
@@ -215,7 +216,24 @@
     state.session.bestLapMs = null;
     state.session.bestLapTeam = null;
     render();
-    logEvent('MODE', state.mode === 'live' ? 'Telemetry detected · OFFICIAL session active' : 'Telemetry detected · TEST session (unofficial)', state.mode === 'live' ? 'evt-info' : 'evt-warn');
+    logEvent('MODE',
+      state.mode === 'live'
+        ? 'OFFICIAL session active'
+        : 'TEST session active (unofficial — does not update leaderboard)',
+      state.mode === 'live' ? 'evt-info' : 'evt-warn');
+  }
+
+  function syncModeToKind() {
+    // Called after session.kind may have changed.
+    if (state.mode === 'standings' || state.mode === 'ended') return;
+    const target = state.session.kind === 'official' ? 'live' : 'test';
+    if (target !== state.mode) {
+      state.mode = target;
+      logEvent('MODE',
+        target === 'live' ? 'Re-classified as OFFICIAL' : 'Re-classified as TEST',
+        target === 'live' ? 'evt-info' : 'evt-warn');
+      render();
+    }
   }
 
   function seedCanonical() {
@@ -236,7 +254,6 @@
 
   function maybeRevertOnStale() {
     if (state.mode === 'standings') return;
-    if (state.mode === 'live' && isInScheduledWindow()) return;
     if (!state.lastTelemetryAt) return;
     if (Date.now() - state.lastTelemetryAt > STALE_TELEMETRY_MS) {
       enterStandingsMode();
@@ -301,8 +318,8 @@
       els.pulse.classList.add('is-stale');
     } else if (state.mode === 'live') {
       stateLabel = 'LIVE · OFFICIAL';
-      sourceLabel = 'Race Control · The Final';
-      title = 'The <em>Final</em> · Live';
+      sourceLabel = `Race Control · ${state.session.name}`;
+      title = `${state.session.name} · <em>Live</em>`;
     } else if (state.mode === 'ended') {
       stateLabel = 'SESSION ENDED';
       sourceLabel = 'Final · Complete';
@@ -593,12 +610,16 @@
 
   function onAnyTelemetry() {
     state.lastTelemetryAt = Date.now();
-    if (state.mode === 'standings') {
-      enterLiveMode();
+    if (state.mode === 'standings' || state.mode === 'ended') {
+      transitionFromIdle();
     }
   }
 
   function applySessionState(msg) {
+    // Apply kind FIRST so transitionFromIdle (via onAnyTelemetry) sees it.
+    if (msg.session) {
+      state.session.kind = msg.session.kind === 'official' ? 'official' : 'test';
+    }
     onAnyTelemetry();
     if (msg.session) {
       Object.assign(state.session, {
@@ -623,6 +644,7 @@
         });
       });
     }
+    syncModeToKind();
     render();
   }
 
