@@ -433,6 +433,14 @@
       if (teamNote) {
         if (state.mode === 'standings') {
           teamNote.textContent = team.canonNote || (team.status === 'dnf' ? 'DNF in Semis' : '');
+        } else if (team.status === 'dnf') {
+          teamNote.textContent = 'DNF';
+        } else if (team.status === 'completed') {
+          teamNote.textContent = 'Run complete';
+        } else if (team.status === 'running') {
+          teamNote.textContent = `Attempt ${team.attempt} · Lap ${team.currentLap}/${team.totalLaps}`;
+        } else {
+          teamNote.textContent = 'Standing by';
         }
       }
 
