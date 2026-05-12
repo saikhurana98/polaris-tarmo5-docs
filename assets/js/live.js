@@ -2,95 +2,98 @@
    POLARIS GP — Live Telemetry Client
    ============================================================
 
-   WIRE PROTOCOL — WebSocket, JSON messages, server → client.
+   The /live/ page has three modes:
+
+     standings — no active session. Shows the most recent canonical
+                 standings (CANONICAL_STANDINGS below). The default
+                 state any time we are outside the scheduled session
+                 window AND no telemetry is flowing.
+
+     live      — telemetry IS flowing AND the current time is inside
+                 the scheduled session window. This is the official
+                 Final; results from here update the leaderboard.
+
+     test      — telemetry IS flowing but the current time is OUTSIDE
+                 the scheduled window. Treated as a practice / sanity
+                 check. Times are clearly badged "unofficial" and do
+                 NOT update the canonical standings.
+
+   To update for a future event:
+     1. Edit SCHEDULED_SESSION below (the one upcoming official run).
+     2. After the run ends, edit CANONICAL_STANDINGS to the new
+        results.
+
+   ============================================================
+   WIRE PROTOCOL — WebSocket, JSON, server → client.
    Connect: wss://<host>/?token=<token>
-   Server validates token, then streams messages.
 
-   Message types:
-
-   1. session_state — full snapshot, sent on connect and on reconnect.
-      {
-        type: "session_state",
-        session: {
-          name: string,           // "Final · Wed May 13"
-          startedAt: number,      // ms epoch, null if not started
-          durationMs: number,     // session window length (default 7_200_000 = 2h)
-          state: "pre"|"running"|"ended",
-          bestLapMs: number|null,
-          bestLapTeam: string|null
-        },
-        teams: TeamState[]
-      }
-
-      TeamState = {
-        id: string,               // "mavericks" — matches data-team in HTML
-        car: number,
-        name: string,
-        attempt: number,
-        currentLap: number,       // 0 = not started, 1..totalLaps in progress
-        totalLaps: number,        // default 5
-        fastestLapMs: number|null,
-        averageLapMs: number|null,
-        status: "idle"|"running"|"completed"|"dnf",
-        lastUpdate: number
-      }
-
-   2. lap_completed — a team has just finished a lap.
-      {
-        type: "lap_completed",
-        teamId: string,
-        lap: number,              // which lap (1..N)
-        lapTimeMs: number,
-        fastestLapMs: number,     // team fastest AFTER this lap
-        averageLapMs: number,     // team avg AFTER this lap
-        sessionBestMs: number|null,
-        isPersonalBest: boolean,
-        isSessionBest: boolean,
-        at: number
-      }
-
-   3. attempt_started — team starts a fresh attempt.
-      { type: "attempt_started", teamId, attempt, at }
-
-   4. team_status — status change without a lap.
-      { type: "team_status", teamId, status, at }
-
-   5. session_ended — final session bell.
-      { type: "session_ended", at }
-
-   6. heartbeat — keepalive, every 10s.
-      { type: "heartbeat", at }
-
+   Six message types (full schema in server/README.md):
+     session_state | lap_completed | attempt_started |
+     team_status   | session_ended | heartbeat
    ============================================================ */
 
 (function() {
   'use strict';
 
+  // ---------- Configuration — edit per event ----------
+
+  // The next (or only) official scheduled session for the season.
+  const SCHEDULED_SESSION = {
+    name: 'Final',
+    start: new Date('2026-05-13T16:00:00+05:30'),  // Wed May 13, 4:00 PM IST
+    end:   new Date('2026-05-13T18:00:00+05:30'),  // Wed May 13, 6:00 PM IST
+    windowLabel: '4:00 — 6:00 PM IST',
+    dateLabel:   'Wed · May 13'
+  };
+
+  // The current authoritative standings. Shown whenever the page is
+  // idle (no live session). Replace after each official session ends.
+  // Today: Semi Finals (May 11) — note that this was a dress rehearsal,
+  // but it's the most recent on-track data so it's what we show.
+  const CANONICAL_STANDINGS = {
+    sourceLabel: 'Semi Finals · May 11',
+    sourceNote: 'Practice run · final standings update after Wed',
+    teams: [
+      { id: 'mavericks',         finalTimeMs: 43182, status: 'completed', note: 'Fastest of the session' },
+      { id: 'skibidi',           finalTimeMs: 46943, status: 'completed', note: 'Five clean laps' },
+      { id: 'orion',             finalTimeMs: null,  status: 'dnf',       note: null },
+      { id: 'apex5',             finalTimeMs: null,  status: 'dnf',       note: null },
+      { id: 'theonepieceisreal', finalTimeMs: null,  status: 'dnf',       note: null },
+      { id: 'forceblr',          finalTimeMs: null,  status: 'dnf',       note: null }
+    ]
+  };
+
+  // ---------- Static team registry ----------
+
   const TEAMS = [
-    { id: 'mavericks',        car: 1,  name: 'Mavericks' },
-    { id: 'skibidi',          car: 2,  name: 'Skibidi' },
-    { id: 'orion',            car: 3,  name: 'Orion' },
-    { id: 'apex5',            car: 5,  name: 'Apex 5' },
+    { id: 'mavericks',         car: 1,  name: 'Mavericks' },
+    { id: 'skibidi',           car: 2,  name: 'Skibidi' },
+    { id: 'orion',             car: 3,  name: 'Orion' },
+    { id: 'apex5',             car: 5,  name: 'Apex 5' },
     { id: 'theonepieceisreal', car: 11, name: 'TheOnePieceIsReal' },
-    { id: 'forceblr',         car: 14, name: 'ForceBLR' }
+    { id: 'forceblr',          car: 14, name: 'ForceBLR' }
   ];
 
   const TOTAL_LAPS = 5;
-  const SESSION_DURATION_MS = 2 * 60 * 60 * 1000; // 2h
+  const SESSION_DURATION_MS = 2 * 60 * 60 * 1000;     // 2h
+  const STALE_TELEMETRY_MS = 60 * 1000;               // 60s no telemetry → consider session over
   const REDUCED_MOTION = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
   // ---------- State ----------
+
   const state = {
+    mode: 'standings',          // 'standings' | 'test' | 'live' | 'ended'
+    firstTelemetryAt: null,
+    lastTelemetryAt: null,
     session: {
-      name: 'Final · Wed May 13',
-      startedAt: Date.now(),
+      name: SCHEDULED_SESSION.name,
+      startedAt: null,
       durationMs: SESSION_DURATION_MS,
-      sessionState: 'running',
       bestLapMs: null,
       bestLapTeam: null
     },
     teams: new Map(),
-    connection: 'connecting'  // 'connecting' | 'live' | 'stale' | 'mock' | 'offline'
+    connection: 'connecting'    // 'connecting' | 'connected' | 'offline'
   };
 
   TEAMS.forEach((t, i) => {
@@ -103,6 +106,8 @@
       totalLaps: TOTAL_LAPS,
       fastestLapMs: null,
       averageLapMs: null,
+      totalTimeMs: null,
+      canonNote: null,
       lapTimes: [],
       status: 'idle',
       lastUpdate: 0,
@@ -111,6 +116,7 @@
   });
 
   // ---------- DOM refs ----------
+
   const tower = document.getElementById('timing-tower');
   const rows = new Map();
   if (tower) {
@@ -124,16 +130,21 @@
   });
 
   const els = {
+    header: document.querySelector('.live-header'),
     pulse: document.querySelector('.live-pulse'),
     stateLabel: document.getElementById('live-state-label'),
     sourceLabel: document.getElementById('live-source-label'),
-    clock: document.getElementById('session-clock'),
-    sessionName: document.getElementById('session-name'),
-    sessionBest: document.getElementById('session-best'),
+    title: document.getElementById('live-title'),
+    meta: document.getElementById('live-meta'),
+    testBanner: document.getElementById('test-banner'),
+    sectionEyebrow: document.getElementById('section-eyebrow'),
+    sectionTitle: document.getElementById('section-title'),
+    sectionLede: document.getElementById('section-lede'),
     feedLog: document.getElementById('feed-log')
   };
 
   // ---------- Formatting ----------
+
   function fmtLap(ms) {
     if (ms == null) return '—';
     const m = Math.floor(ms / 60000);
@@ -154,74 +165,204 @@
     const s = Math.floor((ms % 60000) / 1000);
     return `${String(h).padStart(2, '0')}:${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`;
   }
+  function fmtCountdown(toMs) {
+    const diff = toMs - Date.now();
+    if (diff <= 0) return 'Starting…';
+    const days = Math.floor(diff / 86400000);
+    const h = Math.floor((diff % 86400000) / 3600000);
+    const m = Math.floor((diff % 3600000) / 60000);
+    if (days > 0) return `in ${days}d ${h}h`;
+    if (h > 0) return `in ${h}h ${m}m`;
+    return `in ${m}m`;
+  }
   function fmtFeedTime(ms) {
     const d = new Date(ms);
     return `${String(d.getHours()).padStart(2,'0')}:${String(d.getMinutes()).padStart(2,'0')}:${String(d.getSeconds()).padStart(2,'0')}`;
   }
 
+  // ---------- Mode logic ----------
+
+  function isInScheduledWindow(at) {
+    const t = at != null ? at : Date.now();
+    return t >= SCHEDULED_SESSION.start.getTime() && t <= SCHEDULED_SESSION.end.getTime();
+  }
+
+  function enterStandingsMode() {
+    state.mode = 'standings';
+    state.firstTelemetryAt = null;
+    state.session.startedAt = null;
+    state.session.bestLapMs = null;
+    state.session.bestLapTeam = null;
+    seedCanonical();
+    render();
+    logEvent('MODE', 'Idle · showing current standings', 'evt-info');
+  }
+
+  function enterLiveMode() {
+    state.mode = isInScheduledWindow() ? 'live' : 'test';
+    state.firstTelemetryAt = Date.now();
+    state.session.startedAt = Date.now();
+    state.teams.forEach(t => {
+      t.attempt = 1;
+      t.currentLap = 0;
+      t.fastestLapMs = null;
+      t.averageLapMs = null;
+      t.totalTimeMs = null;
+      t.canonNote = null;
+      t.lapTimes = [];
+      t.status = 'idle';
+    });
+    state.session.bestLapMs = null;
+    state.session.bestLapTeam = null;
+    render();
+    logEvent('MODE', state.mode === 'live' ? 'Telemetry detected · OFFICIAL session active' : 'Telemetry detected · TEST session (unofficial)', state.mode === 'live' ? 'evt-info' : 'evt-warn');
+  }
+
+  function seedCanonical() {
+    CANONICAL_STANDINGS.teams.forEach((canon, idx) => {
+      const team = state.teams.get(canon.id);
+      if (!team) return;
+      team.attempt = 1;
+      team.currentLap = canon.status === 'completed' ? TOTAL_LAPS : 0;
+      team.fastestLapMs = null;
+      team.averageLapMs = canon.finalTimeMs != null ? Math.round(canon.finalTimeMs / TOTAL_LAPS) : null;
+      team.totalTimeMs = canon.finalTimeMs;
+      team.canonNote = canon.note;
+      team.lapTimes = [];
+      team.status = canon.status;
+      team.lastPosition = idx + 1;
+    });
+  }
+
+  function maybeRevertOnStale() {
+    if (state.mode === 'standings') return;
+    if (state.mode === 'live' && isInScheduledWindow()) return;
+    if (!state.lastTelemetryAt) return;
+    if (Date.now() - state.lastTelemetryAt > STALE_TELEMETRY_MS) {
+      enterStandingsMode();
+    }
+  }
+
   // ---------- Sort & rank ----------
+
   function rankedTeams() {
     const arr = Array.from(state.teams.values());
+    if (state.mode === 'standings') {
+      // Canonical sort: completed teams first (by totalTime asc), then DNFs.
+      arr.sort((a, b) => {
+        const aDone = a.status === 'completed';
+        const bDone = b.status === 'completed';
+        if (aDone && !bDone) return -1;
+        if (bDone && !aDone) return 1;
+        if (aDone && bDone) return (a.totalTimeMs ?? Infinity) - (b.totalTimeMs ?? Infinity);
+        return a.car - b.car;
+      });
+      return arr;
+    }
     arr.sort((a, b) => {
-      // DNFs to the bottom
       if (a.status === 'dnf' && b.status !== 'dnf') return 1;
       if (b.status === 'dnf' && a.status !== 'dnf') return -1;
-      // Teams with data above teams with none
       const aHas = a.averageLapMs != null;
       const bHas = b.averageLapMs != null;
       if (aHas && !bHas) return -1;
       if (bHas && !aHas) return 1;
-      // Both have data: lower average wins
-      if (aHas && bHas) {
-        if (a.averageLapMs !== b.averageLapMs) return a.averageLapMs - b.averageLapMs;
-      }
-      // Tie-break: more laps completed
+      if (aHas && bHas && a.averageLapMs !== b.averageLapMs) return a.averageLapMs - b.averageLapMs;
       if (a.currentLap !== b.currentLap) return b.currentLap - a.currentLap;
-      // Final: by car number to be stable
       return a.car - b.car;
     });
     return arr;
   }
 
   // ---------- Render ----------
-  function renderConnection() {
+
+  function setMetaCell(name, label, value) {
+    const cell = document.querySelector(`.live-meta-cell[data-cell="${name}"]`);
+    if (!cell) return;
+    cell.querySelector('.live-meta-label').textContent = label;
+    cell.querySelector('.live-meta-value').textContent = value;
+  }
+
+  function renderHeader() {
+    if (els.header) els.header.setAttribute('data-mode', state.mode);
+    if (els.testBanner) els.testBanner.hidden = state.mode !== 'test';
     if (!els.pulse) return;
     els.pulse.classList.remove('is-stale', 'is-dead');
-    let label = 'CONNECTING';
-    let source = 'Awaiting telemetry';
-    if (state.connection === 'live') {
-      label = 'LIVE';
-      source = 'Race Control Feed';
-    } else if (state.connection === 'mock') {
-      label = 'SIMULATED';
-      source = 'No live feed · showing demo';
+
+    let stateLabel, sourceLabel, title;
+    if (state.mode === 'standings') {
+      stateLabel = 'STANDINGS';
+      sourceLabel = CANONICAL_STANDINGS.sourceLabel;
+      title = 'Current <em>Standings</em>';
+      els.pulse.classList.add('is-dead');
+    } else if (state.mode === 'test') {
+      stateLabel = 'TEST SESSION';
+      sourceLabel = 'Telemetry · Unofficial';
+      title = 'Test <em>Session</em>';
       els.pulse.classList.add('is-stale');
-    } else if (state.connection === 'stale') {
-      label = 'STALE';
-      source = 'No data for 30s';
-      els.pulse.classList.add('is-stale');
-    } else if (state.connection === 'offline') {
-      label = 'OFFLINE';
-      source = 'Reconnecting…';
+    } else if (state.mode === 'live') {
+      stateLabel = 'LIVE · OFFICIAL';
+      sourceLabel = 'Race Control · The Final';
+      title = 'The <em>Final</em> · Live';
+    } else if (state.mode === 'ended') {
+      stateLabel = 'SESSION ENDED';
+      sourceLabel = 'Final · Complete';
+      title = 'Final <em>Result</em>';
       els.pulse.classList.add('is-dead');
     }
-    if (els.stateLabel) els.stateLabel.textContent = label;
-    if (els.sourceLabel) els.sourceLabel.textContent = source;
+
+    if (els.stateLabel) els.stateLabel.textContent = stateLabel;
+    if (els.sourceLabel) els.sourceLabel.textContent = sourceLabel;
+    if (els.title) els.title.innerHTML = title;
   }
 
-  function renderClock() {
-    if (!els.clock) return;
-    const elapsed = state.session.startedAt ? Date.now() - state.session.startedAt : 0;
-    els.clock.textContent = fmtClock(Math.min(elapsed, state.session.durationMs));
-  }
-
-  function renderSessionBest() {
-    if (!els.sessionBest) return;
-    if (state.session.bestLapMs == null) {
-      els.sessionBest.textContent = '—';
+  function renderSectionCopy() {
+    let eyebrow, title, lede;
+    if (state.mode === 'standings') {
+      eyebrow = 'Standings';
+      title = 'Current <em>Standings</em>';
+      lede = `From the most recent on-track session (<strong>${CANONICAL_STANDINGS.sourceLabel}</strong>). The next official run — <strong>${SCHEDULED_SESSION.name}, ${SCHEDULED_SESSION.dateLabel} · ${SCHEDULED_SESSION.windowLabel}</strong> — will replace these standings when complete.`;
+    } else if (state.mode === 'test') {
+      eyebrow = 'Test Session';
+      title = 'Live <em>Pace</em> · Unofficial';
+      lede = `Telemetry is flowing outside the scheduled ${SCHEDULED_SESSION.name} window. <strong>These times do not count</strong> — they're shown for practice and signal-check, and will not be added to the leaderboard. The official session is <strong>${SCHEDULED_SESSION.dateLabel} · ${SCHEDULED_SESSION.windowLabel}</strong>.`;
+    } else if (state.mode === 'live') {
+      eyebrow = 'Timing Tower';
+      title = 'Order &amp; <em>Pace</em>';
+      lede = `<strong>The Final · Live.</strong> Order updates each time a lap is set. <span class="t-flag t-flag--purple">P</span> = fastest of the session. <span class="t-flag t-flag--green">B</span> = personal best within an attempt. Gaps shown relative to current leader's average lap.`;
     } else {
-      const team = state.session.bestLapTeam ? state.teams.get(state.session.bestLapTeam) : null;
-      els.sessionBest.textContent = `${fmtLap(state.session.bestLapMs)}${team ? ' · ' + team.name : ''}`;
+      eyebrow = 'Final Result';
+      title = 'After the <em>Final</em>';
+      lede = `The session has ended. Final standings below.`;
+    }
+    if (els.sectionEyebrow) els.sectionEyebrow.textContent = eyebrow;
+    if (els.sectionTitle) els.sectionTitle.innerHTML = title;
+    if (els.sectionLede) els.sectionLede.innerHTML = lede;
+  }
+
+  function renderMeta() {
+    if (state.mode === 'standings') {
+      setMetaCell('primary', 'Source', CANONICAL_STANDINGS.sourceLabel);
+      setMetaCell('time',    'Next Session', `${SCHEDULED_SESSION.dateLabel}, ${fmtCountdown(SCHEDULED_SESSION.start.getTime())}`);
+      setMetaCell('window',  'Window', SCHEDULED_SESSION.windowLabel);
+      const lead = CANONICAL_STANDINGS.teams.find(t => t.status === 'completed');
+      setMetaCell('best',    'Top Time', lead ? fmtLap(lead.finalTimeMs) : '—');
+    } else if (state.mode === 'test') {
+      setMetaCell('primary', 'Session', 'Test · Unofficial');
+      const elapsed = state.session.startedAt ? Date.now() - state.session.startedAt : 0;
+      setMetaCell('time',    'Elapsed', fmtClock(elapsed));
+      setMetaCell('window',  'Next Official', `${SCHEDULED_SESSION.dateLabel}, ${fmtCountdown(SCHEDULED_SESSION.start.getTime())}`);
+      setMetaCell('best',    'Fastest (Test)', state.session.bestLapMs ? fmtLap(state.session.bestLapMs) : '—');
+    } else if (state.mode === 'live') {
+      setMetaCell('primary', 'Session', `${SCHEDULED_SESSION.name} · ${SCHEDULED_SESSION.dateLabel}`);
+      const elapsed = state.session.startedAt ? Date.now() - state.session.startedAt : 0;
+      setMetaCell('time',    'Elapsed', fmtClock(Math.min(elapsed, state.session.durationMs)));
+      setMetaCell('window',  'Window', SCHEDULED_SESSION.windowLabel);
+      setMetaCell('best',    'Fastest Lap', state.session.bestLapMs ? fmtLap(state.session.bestLapMs) : '—');
+    } else if (state.mode === 'ended') {
+      setMetaCell('primary', 'Result', `${SCHEDULED_SESSION.name} · Complete`);
+      setMetaCell('time',    'Ended', SCHEDULED_SESSION.dateLabel);
+      setMetaCell('window',  'Window', SCHEDULED_SESSION.windowLabel);
+      setMetaCell('best',    'Fastest Lap', state.session.bestLapMs ? fmtLap(state.session.bestLapMs) : '—');
     }
   }
 
@@ -241,7 +382,6 @@
       if (Math.abs(dy) < 1) return;
       row.style.transition = 'none';
       row.style.transform = `translateY(${dy}px)`;
-      // force reflow
       void row.offsetHeight;
       row.style.transition = '';
       row.style.transform = '';
@@ -249,16 +389,21 @@
   }
 
   function renderRows() {
+    if (!tower) return;
+    tower.classList.remove('mode-standings', 'mode-test', 'mode-live', 'mode-ended');
+    tower.classList.add('mode-' + state.mode);
+
     const ranked = rankedTeams();
-    const leaderAvg = ranked[0] && ranked[0].averageLapMs != null ? ranked[0].averageLapMs : null;
-    const leaderId = ranked[0] ? ranked[0].id : null;
+    const leader = ranked[0];
+    const leaderAvg = leader && leader.averageLapMs != null ? leader.averageLapMs : null;
+    const leaderTotal = leader && leader.totalTimeMs != null ? leader.totalTimeMs : null;
 
     ranked.forEach((team, idx) => {
       const pos = idx + 1;
       const row = rows.get(team.id);
       if (!row) return;
       row.style.order = String(pos);
-      row.classList.toggle('is-leader', team.id === leaderId);
+      row.classList.toggle('is-leader', team.id === leader.id && team.status !== 'dnf' && (team.averageLapMs != null || team.totalTimeMs != null));
       row.classList.toggle('is-running', team.status === 'running');
       row.classList.toggle('is-dnf', team.status === 'dnf');
 
@@ -269,7 +414,7 @@
       const deltaEl = row.querySelector('.t-pos-delta');
       if (deltaEl) {
         deltaEl.classList.remove('t-pos-delta--up', 't-pos-delta--down', 't-pos-delta--same');
-        if (delta === 0) {
+        if (state.mode === 'standings' || delta === 0) {
           deltaEl.classList.add('t-pos-delta--same');
           deltaEl.textContent = '—';
         } else if (delta < 0) {
@@ -281,44 +426,90 @@
         }
       }
 
-      // car & team text already correct from server-render; just keep in sync
       const teamName = row.querySelector('.t-team-name');
       if (teamName) teamName.textContent = team.name;
+
+      const teamNote = row.querySelector('.t-team-note');
+      if (teamNote) {
+        if (state.mode === 'standings') {
+          teamNote.textContent = team.canonNote || (team.status === 'dnf' ? 'DNF in Semis' : '');
+        }
+      }
 
       // lap pips
       const pips = row.querySelectorAll('.t-lap-pip');
       pips.forEach((pip, i) => {
         pip.classList.remove('filled', 'current');
-        if (i + 1 < team.currentLap) pip.classList.add('filled');
-        else if (i + 1 === team.currentLap && team.status === 'running') pip.classList.add('current');
-        else if (i + 1 <= team.currentLap) pip.classList.add('filled');
+        if (state.mode === 'standings') {
+          if (team.status === 'completed') pip.classList.add('filled');
+        } else {
+          if (i + 1 < team.currentLap) pip.classList.add('filled');
+          else if (i + 1 === team.currentLap && team.status === 'running') pip.classList.add('current');
+          else if (i + 1 <= team.currentLap) pip.classList.add('filled');
+        }
       });
 
-      // attempt
-      const attemptVal = row.querySelector('.t-attempt .t-cell-value');
-      if (attemptVal) attemptVal.textContent = String(team.attempt);
-
-      // fastest
+      // labels + values vary by mode
+      const labels = row.querySelectorAll('.t-cell-label');
       const fastestVal = row.querySelector('.t-fastest .t-cell-value');
-      if (fastestVal) {
-        fastestVal.textContent = fmtLap(team.fastestLapMs);
-        fastestVal.classList.toggle('t-cell-value--purple',
-          team.fastestLapMs != null && team.fastestLapMs === state.session.bestLapMs);
-      }
-
-      // avg
       const avgVal = row.querySelector('.t-avg .t-cell-value');
-      if (avgVal) avgVal.textContent = fmtLap(team.averageLapMs);
-
-      // gap
       const gapVal = row.querySelector('.t-gap .t-cell-value');
-      if (gapVal) {
-        if (team.id === leaderId && team.averageLapMs != null) {
-          gapVal.textContent = 'LEADER';
-        } else if (leaderAvg != null && team.averageLapMs != null) {
-          gapVal.textContent = fmtGap(team.averageLapMs - leaderAvg);
-        } else {
-          gapVal.textContent = '—';
+      const attemptVal = row.querySelector('.t-attempt .t-cell-value');
+
+      // Reset purple highlight
+      if (fastestVal) fastestVal.classList.remove('t-cell-value--purple');
+
+      if (state.mode === 'standings') {
+        // Labels: Attempt → '—', Fastest → 'Total', Average → 'Avg/Lap', Gap → 'Status'
+        labels.forEach(lbl => {
+          const parent = lbl.parentElement;
+          if (parent.classList.contains('t-attempt')) lbl.textContent = '—';
+          else if (parent.classList.contains('t-fastest')) lbl.textContent = 'Total';
+          else if (parent.classList.contains('t-avg')) lbl.textContent = 'Avg/Lap';
+          else if (parent.classList.contains('t-gap')) lbl.textContent = 'Status';
+        });
+        if (attemptVal) attemptVal.textContent = '—';
+        if (fastestVal) fastestVal.textContent = fmtLap(team.totalTimeMs);
+        if (avgVal) avgVal.textContent = fmtLap(team.averageLapMs);
+        if (gapVal) {
+          if (team.status === 'dnf') {
+            gapVal.textContent = 'DNF';
+            gapVal.classList.add('t-cell-value--dim');
+          } else if (team.id === leader.id) {
+            gapVal.textContent = 'LEADER';
+            gapVal.classList.remove('t-cell-value--dim');
+          } else if (leaderTotal != null && team.totalTimeMs != null) {
+            gapVal.textContent = fmtGap(team.totalTimeMs - leaderTotal);
+            gapVal.classList.remove('t-cell-value--dim');
+          } else {
+            gapVal.textContent = '—';
+            gapVal.classList.remove('t-cell-value--dim');
+          }
+        }
+      } else {
+        labels.forEach(lbl => {
+          const parent = lbl.parentElement;
+          if (parent.classList.contains('t-attempt')) lbl.textContent = 'Attempt';
+          else if (parent.classList.contains('t-fastest')) lbl.textContent = 'Fastest';
+          else if (parent.classList.contains('t-avg')) lbl.textContent = 'Average';
+          else if (parent.classList.contains('t-gap')) lbl.textContent = 'Gap';
+        });
+        if (attemptVal) attemptVal.textContent = String(team.attempt);
+        if (fastestVal) {
+          fastestVal.textContent = fmtLap(team.fastestLapMs);
+          fastestVal.classList.toggle('t-cell-value--purple',
+            team.fastestLapMs != null && team.fastestLapMs === state.session.bestLapMs);
+        }
+        if (avgVal) avgVal.textContent = fmtLap(team.averageLapMs);
+        if (gapVal) {
+          gapVal.classList.remove('t-cell-value--dim');
+          if (team.id === leader.id && team.averageLapMs != null) {
+            gapVal.textContent = 'LEADER';
+          } else if (leaderAvg != null && team.averageLapMs != null) {
+            gapVal.textContent = fmtGap(team.averageLapMs - leaderAvg);
+          } else {
+            gapVal.textContent = '—';
+          }
         }
       }
 
@@ -328,41 +519,52 @@
 
   function renderPace() {
     const teams = Array.from(state.teams.values());
-    const withAvg = teams.filter(t => t.averageLapMs != null).map(t => t.averageLapMs);
-    if (!withAvg.length) return;
-    const min = Math.min(...withAvg);
-    const max = Math.max(...withAvg);
-    const range = Math.max(max - min, 1);
-    const leader = rankedTeams()[0];
-
+    let metric;
+    if (state.mode === 'standings') {
+      metric = t => t.totalTimeMs;
+    } else {
+      metric = t => t.averageLapMs;
+    }
+    const withMetric = teams.filter(t => metric(t) != null).map(metric);
     teams.forEach(team => {
       const row = paceRows.get(team.id);
       if (!row) return;
       const bar = row.querySelector('.pace-bar');
       const val = row.querySelector('.pace-value');
-      row.classList.toggle('is-leader', leader && team.id === leader.id);
-      if (team.averageLapMs == null) {
+      if (!withMetric.length || metric(team) == null) {
+        row.classList.remove('is-leader');
         if (bar) bar.style.width = '0%';
-        if (val) val.textContent = '—';
+        if (val) val.textContent = team.status === 'dnf' ? 'DNF' : '—';
         return;
       }
-      // Faster = shorter visual bar. Slowest = 100%.
-      const pct = 30 + ((team.averageLapMs - min) / range) * 70;
+      const min = Math.min(...withMetric);
+      const max = Math.max(...withMetric);
+      const range = Math.max(max - min, 1);
+      const isLeader = metric(team) === min;
+      row.classList.toggle('is-leader', isLeader);
+      const pct = 30 + ((metric(team) - min) / range) * 70;
       if (bar) bar.style.width = `${pct}%`;
-      if (val) val.textContent = fmtLap(team.averageLapMs);
+      if (val) val.textContent = fmtLap(metric(team));
     });
   }
 
   function render() {
     const oldRects = captureRects();
+    renderHeader();
+    renderSectionCopy();
+    renderMeta();
     renderRows();
     playFlip(oldRects);
     renderPace();
-    renderSessionBest();
-    renderConnection();
+  }
+
+  function renderTick() {
+    // Cheap per-second updates without re-running the full row render.
+    renderMeta();
   }
 
   // ---------- Feed log ----------
+
   function logEvent(type, body, evtClass) {
     if (!els.feedLog) return;
     const line = document.createElement('div');
@@ -374,24 +576,30 @@
     `;
     line.querySelector('.feed-line-body').textContent = body;
     els.feedLog.insertBefore(line, els.feedLog.firstChild);
-    // Cap to 30 lines
     while (els.feedLog.children.length > 30) {
       els.feedLog.removeChild(els.feedLog.lastChild);
     }
   }
 
-  // ---------- Message handlers ----------
+  // ---------- Telemetry handlers ----------
+
+  function onAnyTelemetry() {
+    state.lastTelemetryAt = Date.now();
+    if (state.mode === 'standings') {
+      enterLiveMode();
+    }
+  }
+
   function applySessionState(msg) {
+    onAnyTelemetry();
     if (msg.session) {
       Object.assign(state.session, {
         name: msg.session.name || state.session.name,
         startedAt: msg.session.startedAt || state.session.startedAt,
         durationMs: msg.session.durationMs || state.session.durationMs,
-        sessionState: msg.session.state || state.session.sessionState,
         bestLapMs: msg.session.bestLapMs ?? state.session.bestLapMs,
         bestLapTeam: msg.session.bestLapTeam ?? state.session.bestLapTeam
       });
-      if (els.sessionName && msg.session.name) els.sessionName.textContent = msg.session.name;
     }
     if (Array.isArray(msg.teams)) {
       msg.teams.forEach(t => {
@@ -411,6 +619,7 @@
   }
 
   function applyLapCompleted(msg) {
+    onAnyTelemetry();
     const team = state.teams.get(msg.teamId);
     if (!team) return;
     team.currentLap = msg.lap;
@@ -441,6 +650,7 @@
   }
 
   function applyAttemptStarted(msg) {
+    onAnyTelemetry();
     const team = state.teams.get(msg.teamId);
     if (!team) return;
     team.attempt = msg.attempt;
@@ -454,6 +664,7 @@
   }
 
   function applyTeamStatus(msg) {
+    onAnyTelemetry();
     const team = state.teams.get(msg.teamId);
     if (!team) return;
     team.status = msg.status;
@@ -469,29 +680,25 @@
     else if (msg.type === 'attempt_started') applyAttemptStarted(msg);
     else if (msg.type === 'team_status') applyTeamStatus(msg);
     else if (msg.type === 'session_ended') {
-      state.session.sessionState = 'ended';
+      state.mode = 'ended';
       logEvent('END', 'Session ended · checkered flag', 'evt-info');
       render();
     } else if (msg.type === 'heartbeat') {
-      lastHeartbeat = Date.now();
+      state.lastTelemetryAt = Date.now();
     }
   }
 
   // ---------- WebSocket connection ----------
+
   let socket = null;
   let reconnectAttempt = 0;
   let reconnectTimer = null;
-  let lastHeartbeat = 0;
-  let staleTimer = null;
-  let mockTimer = null;
-  let mockRunning = false;
 
   function connect() {
     const url = (window.LIVE_CONFIG && window.LIVE_CONFIG.wsUrl) || '';
     const token = (window.LIVE_CONFIG && window.LIVE_CONFIG.wsToken) || '';
     if (!url) {
-      logEvent('INFO', 'No WS endpoint configured — starting simulated stream', 'evt-info');
-      startMock();
+      logEvent('INFO', 'No WS endpoint configured — page will stay on standings until telemetry is wired', 'evt-info');
       return;
     }
     let connectUrl = url;
@@ -500,7 +707,6 @@
     }
 
     state.connection = 'connecting';
-    renderConnection();
     logEvent('WS', `Connecting to ${url.replace(/^wss?:\/\//, '').split('?')[0]}…`, 'evt-info');
 
     try {
@@ -513,15 +719,11 @@
 
     socket.addEventListener('open', () => {
       reconnectAttempt = 0;
-      lastHeartbeat = Date.now();
-      state.connection = 'live';
-      stopMock();
-      renderConnection();
-      logEvent('WS', 'Connected · awaiting state snapshot', 'evt-info');
+      state.connection = 'connected';
+      logEvent('WS', 'Connected · awaiting telemetry', 'evt-info');
     });
 
     socket.addEventListener('message', (ev) => {
-      lastHeartbeat = Date.now();
       try {
         const msg = JSON.parse(ev.data);
         dispatch(msg);
@@ -537,6 +739,7 @@
     socket.addEventListener('close', (ev) => {
       logEvent('WS', `Disconnected (code ${ev.code})`, 'evt-warn');
       socket = null;
+      state.connection = 'offline';
       scheduleReconnect();
     });
   }
@@ -544,16 +747,7 @@
   function scheduleReconnect() {
     if (reconnectTimer) return;
     reconnectAttempt += 1;
-    if (reconnectAttempt > 5) {
-      logEvent('WS', 'Giving up · falling back to simulated stream', 'evt-warn');
-      state.connection = 'mock';
-      renderConnection();
-      startMock();
-      return;
-    }
-    const wait = Math.min(30000, 1000 * Math.pow(2, reconnectAttempt - 1));
-    state.connection = 'offline';
-    renderConnection();
+    const wait = Math.min(30000, 1000 * Math.pow(2, Math.min(reconnectAttempt - 1, 5)));
     logEvent('WS', `Retry #${reconnectAttempt} in ${(wait / 1000).toFixed(0)}s`, 'evt-info');
     reconnectTimer = setTimeout(() => {
       reconnectTimer = null;
@@ -561,95 +755,13 @@
     }, wait);
   }
 
-  function checkStale() {
-    if (state.connection !== 'live') return;
-    if (lastHeartbeat && Date.now() - lastHeartbeat > 30000) {
-      state.connection = 'stale';
-      renderConnection();
-    }
-  }
-
-  // ---------- Mock / simulated stream ----------
-  function startMock() {
-    if (mockRunning) return;
-    mockRunning = true;
-    state.connection = 'mock';
-    renderConnection();
-
-    state.session.startedAt = Date.now() - 4 * 60 * 1000; // start as if 4 min in
-    state.teams.forEach(t => { t.status = 'running'; });
-
-    // Pre-seed a few laps so the page is interesting on load
-    setTimeout(() => simulateLap('mavericks', 8342 + Math.random() * 200), 600);
-    setTimeout(() => simulateLap('mavericks', 8512 + Math.random() * 200), 1200);
-    setTimeout(() => simulateLap('skibidi',   8881 + Math.random() * 300), 1800);
-    setTimeout(() => simulateLap('orion',     9412 + Math.random() * 400), 2400);
-    setTimeout(() => simulateLap('apex5',     9621 + Math.random() * 400), 3000);
-    setTimeout(() => simulateLap('forceblr', 10124 + Math.random() * 600), 3600);
-
-    function tick() {
-      const pool = Array.from(state.teams.values()).filter(t =>
-        t.status !== 'dnf' && t.currentLap < t.totalLaps
-      );
-      if (!pool.length) {
-        // All done — restart everyone after 5s
-        setTimeout(() => {
-          state.teams.forEach(t => {
-            t.attempt += 1;
-            t.currentLap = 0;
-            t.fastestLapMs = null;
-            t.averageLapMs = null;
-            t.lapTimes = [];
-            t.status = 'running';
-            applyAttemptStarted({ type: 'attempt_started', teamId: t.id, attempt: t.attempt, at: Date.now() });
-          });
-        }, 5000);
-      } else {
-        const team = pool[Math.floor(Math.random() * pool.length)];
-        const base = team.fastestLapMs || (8500 + Math.random() * 2000);
-        const variance = (Math.random() - 0.4) * 700;
-        const lapTime = Math.max(7800, Math.round(base + variance));
-        simulateLap(team.id, lapTime);
-      }
-      mockTimer = setTimeout(tick, 2500 + Math.random() * 2500);
-    }
-    mockTimer = setTimeout(tick, 4500);
-  }
-
-  function stopMock() {
-    mockRunning = false;
-    if (mockTimer) { clearTimeout(mockTimer); mockTimer = null; }
-  }
-
-  function simulateLap(teamId, lapTimeMs) {
-    const team = state.teams.get(teamId);
-    if (!team) return;
-    if (team.currentLap >= team.totalLaps) return;
-    team.lapTimes.push(lapTimeMs);
-    const newLap = team.currentLap + 1;
-    const fastest = Math.min(lapTimeMs, team.fastestLapMs ?? Infinity);
-    const avg = Math.round(team.lapTimes.reduce((a, b) => a + b, 0) / team.lapTimes.length);
-    const isPB = fastest === lapTimeMs;
-    const isSB = state.session.bestLapMs == null || lapTimeMs < state.session.bestLapMs;
-    dispatch({
-      type: 'lap_completed',
-      teamId,
-      lap: newLap,
-      lapTimeMs,
-      fastestLapMs: fastest,
-      averageLapMs: avg,
-      sessionBestMs: isSB ? lapTimeMs : state.session.bestLapMs,
-      isPersonalBest: isPB,
-      isSessionBest: isSB,
-      at: Date.now()
-    });
-  }
-
   // ---------- Boot ----------
+
   function boot() {
+    seedCanonical();
     render();
-    setInterval(renderClock, 1000);
-    staleTimer = setInterval(checkStale, 5000);
+    setInterval(renderTick, 1000);
+    setInterval(maybeRevertOnStale, 5000);
     connect();
   }
 

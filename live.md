@@ -5,40 +5,47 @@ permalink: /live/
 description: "Live telemetry from the Polaris GP race track — lap-by-lap timing, fastest laps, and live position updates."
 ---
 
-<div class="live-header">
+<div class="live-header" data-mode="standings">
   <div class="container">
     <div class="live-eyebrow">
       <span class="live-pulse" aria-hidden="true"></span>
-      <span class="live-label" id="live-state-label">Connecting…</span>
-      <span class="live-source" id="live-source-label">Awaiting telemetry</span>
+      <span class="live-label" id="live-state-label">Loading…</span>
+      <span class="live-source" id="live-source-label">—</span>
     </div>
-    <h1 class="live-title">Active <em>Session</em></h1>
-    <div class="live-meta">
-      <div class="live-meta-cell">
-        <span class="live-meta-label">Session</span>
-        <span class="live-meta-value" id="session-name">Final · Wed May 13</span>
+    <h1 class="live-title" id="live-title">The <em>Track</em></h1>
+    <div class="live-meta" id="live-meta">
+      <div class="live-meta-cell" data-cell="primary">
+        <span class="live-meta-label">—</span>
+        <span class="live-meta-value">—</span>
       </div>
-      <div class="live-meta-cell">
-        <span class="live-meta-label">Elapsed</span>
-        <span class="live-meta-value mono" id="session-clock">00:00:00</span>
+      <div class="live-meta-cell" data-cell="time">
+        <span class="live-meta-label">—</span>
+        <span class="live-meta-value mono">—</span>
       </div>
-      <div class="live-meta-cell">
-        <span class="live-meta-label">Window</span>
-        <span class="live-meta-value">4:00 — 6:00 PM</span>
+      <div class="live-meta-cell" data-cell="window">
+        <span class="live-meta-label">—</span>
+        <span class="live-meta-value">—</span>
       </div>
-      <div class="live-meta-cell">
-        <span class="live-meta-label">Fastest Lap</span>
-        <span class="live-meta-value mono" id="session-best">—</span>
+      <div class="live-meta-cell" data-cell="best">
+        <span class="live-meta-label">—</span>
+        <span class="live-meta-value mono">—</span>
       </div>
     </div>
   </div>
 </div>
 
+<div class="test-banner" id="test-banner" hidden>
+  <div class="container">
+    <strong>Test session.</strong> Telemetry is streaming in outside the scheduled <em>Final</em> window —
+    these times are <strong>unofficial</strong> and will not appear on the leaderboard.
+  </div>
+</div>
+
 <section class="section">
   <div class="container">
-    <div class="section-eyebrow">Timing Tower</div>
-    <h2 class="section-title">Order &amp; <em>Pace</em></h2>
-    <p class="section-lede">Order updates each time a lap is set. <span class="t-flag t-flag--purple">P</span> = fastest of the session. <span class="t-flag t-flag--green">B</span> = personal best within an attempt. Gaps shown relative to current leader's average lap.</p>
+    <div class="section-eyebrow" id="section-eyebrow">Standings</div>
+    <h2 class="section-title" id="section-title">Current <em>Standings</em></h2>
+    <p class="section-lede" id="section-lede">Loading current standings…</p>
 
     <div class="timing-tower" id="timing-tower">
 
