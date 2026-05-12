@@ -22,6 +22,17 @@ jobs:
         uses: actions/checkout@v4
       - name: Setup Pages
         uses: actions/configure-pages@v5
+      - name: Inject live telemetry config
+        env:
+          LIVE_WS_URL: ${{ secrets.LIVE_WS_URL }}
+          LIVE_WS_TOKEN: ${{ secrets.LIVE_WS_TOKEN }}
+        run: |
+          mkdir -p _data
+          {
+            printf 'ws_url: "%s"\n' "${LIVE_WS_URL}"
+            printf 'ws_token: "%s"\n' "${LIVE_WS_TOKEN}"
+          } > _data/live.yml
+          echo "Wrote _data/live.yml (url set: $([ -n "$LIVE_WS_URL" ] && echo yes || echo no), token set: $([ -n "$LIVE_WS_TOKEN" ] && echo yes || echo no))"
       - name: Build with Jekyll
         uses: actions/jekyll-build-pages@v1
         with:
