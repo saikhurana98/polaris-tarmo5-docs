@@ -278,13 +278,15 @@
   function rankedTeams() {
     const arr = Array.from(state.teams.values());
     if (state.mode === 'standings') {
-      // Canonical sort: completed teams first (by totalTime asc), then DNFs.
+      // Canonical sort: completed teams first (by AVG lap time asc — that's the
+      // scoring metric), then DNFs. Avg-lap and total-time give the same order
+      // when every team ran the same lap count, but the primary metric is avg.
       arr.sort((a, b) => {
         const aDone = a.status === 'completed';
         const bDone = b.status === 'completed';
         if (aDone && !bDone) return -1;
         if (bDone && !aDone) return 1;
-        if (aDone && bDone) return (a.totalTimeMs ?? Infinity) - (b.totalTimeMs ?? Infinity);
+        if (aDone && bDone) return (a.averageLapMs ?? Infinity) - (b.averageLapMs ?? Infinity);
         return a.car - b.car;
       });
       return arr;
@@ -350,7 +352,7 @@
     if (state.mode === 'standings') {
       eyebrow = 'Standings';
       title = 'Current <em>Standings</em>';
-      lede = `From the most recent on-track session (<strong>${CANONICAL_STANDINGS.sourceLabel}</strong>). The next official run — <strong>${SCHEDULED_SESSION.name}, ${SCHEDULED_SESSION.dateLabel} · ${SCHEDULED_SESSION.windowLabel}</strong> — will replace these standings when complete.`;
+      lede = `From the most recent on-track session (<strong>${CANONICAL_STANDINGS.sourceLabel}</strong>). Ranking is by <strong>average lap time</strong> across the five timed laps (formation lap excluded). The next official run — <strong>${SCHEDULED_SESSION.name}, ${SCHEDULED_SESSION.dateLabel} · ${SCHEDULED_SESSION.windowLabel}</strong> — will replace these standings when complete.`;
     } else if (state.mode === 'test') {
       eyebrow = 'Test Session';
       title = 'Live <em>Pace</em> · Unofficial';
@@ -375,7 +377,8 @@
       setMetaCell('time',    'Next Session', `${SCHEDULED_SESSION.dateLabel}, ${fmtCountdown(SCHEDULED_SESSION.start.getTime())}`);
       setMetaCell('window',  'Window', SCHEDULED_SESSION.windowLabel);
       const lead = CANONICAL_STANDINGS.teams.find(t => t.status === 'completed');
-      setMetaCell('best',    'Top Time', lead ? fmtLap(lead.finalTimeMs) : '—');
+      const leadAvg = lead && lead.finalTimeMs != null ? Math.round(lead.finalTimeMs / TOTAL_LAPS) : null;
+      setMetaCell('best',    'Best Avg Lap', leadAvg != null ? fmtLap(leadAvg) : '—');
     } else if (state.mode === 'test') {
       setMetaCell('primary', 'Session', 'Test · Unofficial');
       const elapsed = state.session.startedAt ? Date.now() - state.session.startedAt : 0;
@@ -498,17 +501,18 @@
       if (fastestVal) fastestVal.classList.remove('t-cell-value--purple');
 
       if (state.mode === 'standings') {
-        // Labels: Attempt → '—', Fastest → 'Total', Average → 'Avg/Lap', Gap → 'Status'
+        // Avg lap is the scoring metric, so it sits in the prominent column.
+        // Total moves to the secondary column for context.
         labels.forEach(lbl => {
           const parent = lbl.parentElement;
           if (parent.classList.contains('t-attempt')) lbl.textContent = '—';
-          else if (parent.classList.contains('t-fastest')) lbl.textContent = 'Total';
-          else if (parent.classList.contains('t-avg')) lbl.textContent = 'Avg/Lap';
-          else if (parent.classList.contains('t-gap')) lbl.textContent = 'Status';
+          else if (parent.classList.contains('t-fastest')) lbl.textContent = 'Avg Lap';
+          else if (parent.classList.contains('t-avg')) lbl.textContent = 'Total';
+          else if (parent.classList.contains('t-gap')) lbl.textContent = 'Gap';
         });
         if (attemptVal) attemptVal.textContent = '—';
-        if (fastestVal) fastestVal.textContent = fmtLap(team.totalTimeMs);
-        if (avgVal) avgVal.textContent = fmtLap(team.averageLapMs);
+        if (fastestVal) fastestVal.textContent = fmtLap(team.averageLapMs);
+        if (avgVal) avgVal.textContent = fmtLap(team.totalTimeMs);
         if (gapVal) {
           if (team.status === 'dnf') {
             gapVal.textContent = 'DNF';
@@ -516,8 +520,8 @@
           } else if (team.id === leader.id) {
             gapVal.textContent = 'LEADER';
             gapVal.classList.remove('t-cell-value--dim');
-          } else if (leaderTotal != null && team.totalTimeMs != null) {
-            gapVal.textContent = fmtGap(team.totalTimeMs - leaderTotal);
+          } else if (leaderAvg != null && team.averageLapMs != null) {
+            gapVal.textContent = fmtGap(team.averageLapMs - leaderAvg);
             gapVal.classList.remove('t-cell-value--dim');
           } else {
             gapVal.textContent = '—';
@@ -557,12 +561,8 @@
 
   function renderPace() {
     const teams = Array.from(state.teams.values());
-    let metric;
-    if (state.mode === 'standings') {
-      metric = t => t.totalTimeMs;
-    } else {
-      metric = t => t.averageLapMs;
-    }
+    // Avg lap is the scoring metric in every mode.
+    const metric = t => t.averageLapMs;
     const withMetric = teams.filter(t => metric(t) != null).map(metric);
     teams.forEach(team => {
       const row = paceRows.get(team.id);

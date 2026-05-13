@@ -18,16 +18,16 @@ description: "Polaris GP Finals standings — Semi Finals complete, Final to com
   <div class="container">
     <div class="section-eyebrow">Semi Finals · Final Standing</div>
     <h2 class="section-title">After <em>Monday</em></h2>
-    <p class="section-lede">The dress rehearsal is in the books. <strong>Two teams</strong> completed their session. <strong>Four did not finish.</strong> These times do not carry — Wednesday's Final is the only scoring run — but the gap between teams is now public.</p>
+    <p class="section-lede">The dress rehearsal is in the books. <strong>Two teams</strong> completed their session. <strong>Four did not finish.</strong> These times do not carry — Wednesday's Final is the only scoring run — but the gap between teams is now public. <strong>Ranking is by average lap time</strong> across the five timed laps (the formation lap doesn't count).</p>
 
     <ol class="leaderboard">
       <li class="lb-row lb-finished lb-pos-1">
         <div class="lb-pos">01</div>
         <div class="lb-team">
           <div class="lb-team-name">Mavericks</div>
-          <div class="lb-team-note">Fastest run of the session</div>
+          <div class="lb-team-note">Best average lap of the session</div>
         </div>
-        <div class="lb-time">0:43:182</div>
+        <div class="lb-time">0:08:636</div>
         <div class="lb-gap">—</div>
         <div class="lb-status">Finished</div>
       </li>
@@ -37,8 +37,8 @@ description: "Polaris GP Finals standings — Semi Finals complete, Final to com
           <div class="lb-team-name">Skibidi</div>
           <div class="lb-team-note">Completed five clean laps</div>
         </div>
-        <div class="lb-time">0:46:943</div>
-        <div class="lb-gap">+3.761</div>
+        <div class="lb-time">0:09:389</div>
+        <div class="lb-gap">+0.753</div>
         <div class="lb-status">Finished</div>
       </li>
       <li class="lb-row lb-dnf">
