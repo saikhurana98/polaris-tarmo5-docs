@@ -78,7 +78,8 @@
   const TOTAL_LAPS = 5;
   const SESSION_DURATION_MS = 2 * 60 * 60 * 1000;     // 2h
   const STALE_TELEMETRY_MS = 60 * 1000;               // 60s no messages at all → relay dead → standings
-  const ENDED_LINGER_MS = 10 * 60 * 1000;             // 10min idle after session_ended → drift back to standings
+  const ENDED_LINGER_MS = 10 * 60 * 1000;             // 10min idle after session_ended (official) → drift back to standings
+  const TEST_IDLE_MS = 3 * 60 * 1000;                 // 3min with no real events in test mode → revert to standings
   const REDUCED_MOTION = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
   // ---------- State ----------
@@ -261,10 +262,13 @@
       enterStandingsMode();
       return;
     }
-    // Ended mode lingers while heartbeats flow, but eventually drift to standings
-    // so visitors don't see "Final Result" stuck on the page indefinitely.
-    if (state.mode === 'ended' && state.lastEventAt &&
-        Date.now() - state.lastEventAt > ENDED_LINGER_MS) {
+    // Heartbeats don't count as session activity, so test/ended modes
+    // would otherwise linger forever while the relay heartbeats.
+    if (!state.lastEventAt) return;
+    const idle = Date.now() - state.lastEventAt;
+    if (state.mode === 'ended' && idle > ENDED_LINGER_MS) {
+      enterStandingsMode();
+    } else if (state.mode === 'test' && idle > TEST_IDLE_MS) {
       enterStandingsMode();
     }
   }
@@ -656,8 +660,15 @@
     }
     // If the snapshot says the session has already ended, honour it —
     // otherwise late viewers see LIVE forever after the Final closes.
+    // Only OFFICIAL sessions get the "Final Result" ended view; a test
+    // session ending just drops the page back to standings.
     if (msg.session && msg.session.state === 'ended') {
-      state.mode = 'ended';
+      if (state.session.kind === 'official') {
+        state.mode = 'ended';
+      } else {
+        enterStandingsMode();
+        return;
+      }
     } else {
       syncModeToKind();
     }
@@ -726,11 +737,18 @@
     else if (msg.type === 'attempt_started') applyAttemptStarted(msg);
     else if (msg.type === 'team_status') applyTeamStatus(msg);
     else if (msg.type === 'session_ended') {
-      state.mode = 'ended';
       state.lastTelemetryAt = Date.now();
       state.lastEventAt = Date.now();
-      logEvent('END', 'Session ended · checkered flag', 'evt-info');
-      render();
+      // Only OFFICIAL sessions show the "Final Result" ended screen.
+      // Test sessions ending just drop straight back to standings.
+      if (state.session.kind === 'official') {
+        state.mode = 'ended';
+        logEvent('END', 'Session ended · checkered flag', 'evt-info');
+        render();
+      } else {
+        logEvent('END', 'Test session ended · reverting to standings', 'evt-info');
+        enterStandingsMode();
+      }
     } else if (msg.type === 'heartbeat') {
       // Connection liveness only — does NOT count as session activity,
       // so the ENDED → STANDINGS drift still fires even while heartbeats flow.
