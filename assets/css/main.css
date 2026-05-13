@@ -1752,6 +1752,16 @@ ul.resource-list a:hover { border-color: var(--red); background: var(--paper-war
   font-size: 17px;
   letter-spacing: -0.02em;
 }
+/* Avg lap is the scoring metric — emphasise it. In standings mode it lives
+   in the .t-fastest slot (swapped layout); in every other mode it lives
+   in the .t-avg slot. */
+.timing-tower.mode-standings .t-fastest .t-cell-value,
+.timing-tower.mode-test .t-avg .t-cell-value,
+.timing-tower.mode-live .t-avg .t-cell-value,
+.timing-tower.mode-ended .t-avg .t-cell-value {
+  font-size: 20px;
+  font-weight: 600;
+}
 .t-cell-value--purple { color: #c084fc; }
 .t-cell-value--green { color: #4ade80; }
 .t-cell-value.flash {
