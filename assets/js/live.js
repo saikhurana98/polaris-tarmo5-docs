@@ -79,7 +79,7 @@
   const SESSION_DURATION_MS = 2 * 60 * 60 * 1000;     // 2h
   const STALE_TELEMETRY_MS = 60 * 1000;               // 60s no messages at all → relay dead → standings
   const ENDED_LINGER_MS = 10 * 60 * 1000;             // 10min idle after session_ended (official) → drift back to standings
-  const TEST_IDLE_MS = 3 * 60 * 1000;                 // 3min with no real events in test mode → revert to standings
+  const TEST_IDLE_MS = 90 * 1000;                     // 90s with no real events in test mode → revert to standings
   const REDUCED_MOTION = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
   // ---------- State ----------
@@ -630,11 +630,23 @@
   }
 
   function applySessionState(msg) {
-    // Apply kind FIRST so transitionFromIdle (via onAnyTelemetry) sees it.
+    // Apply kind FIRST so transitionFromIdle sees it.
     if (msg.session) {
       state.session.kind = msg.session.kind === 'official' ? 'official' : 'test';
     }
-    onAnyTelemetry();
+    // Connection liveness ticks on any message, but only state==='running'
+    // counts as session activity. 'pre'/'ended'/missing must NOT keep the
+    // page falsely active — a stale snapshot would otherwise pin test mode.
+    state.lastTelemetryAt = Date.now();
+    const sessionState = msg.session && msg.session.state;
+    const isRunning = sessionState === 'running';
+    const isEnded = sessionState === 'ended';
+    if (isRunning) {
+      state.lastEventAt = Date.now();
+      if (state.mode === 'standings' || state.mode === 'ended') {
+        transitionFromIdle();
+      }
+    }
     if (msg.session) {
       Object.assign(state.session, {
         name: msg.session.name || state.session.name,
@@ -658,20 +670,19 @@
         });
       });
     }
-    // If the snapshot says the session has already ended, honour it —
-    // otherwise late viewers see LIVE forever after the Final closes.
-    // Only OFFICIAL sessions get the "Final Result" ended view; a test
-    // session ending just drops the page back to standings.
-    if (msg.session && msg.session.state === 'ended') {
+    if (isEnded) {
+      // Official: show Final Result. Test: just drop back to standings.
       if (state.session.kind === 'official') {
         state.mode = 'ended';
+        state.lastEventAt = Date.now();
       } else {
         enterStandingsMode();
         return;
       }
-    } else {
+    } else if (isRunning) {
       syncModeToKind();
     }
+    // For 'pre' or missing state, do nothing — don't activate a mode.
     render();
   }
 
